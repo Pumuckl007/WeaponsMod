@@ -12,6 +12,7 @@ import weapons.client.renderitems.ItemBulletRender;
 import weapons.client.renderitems.ItemPistolRender;
 import weapons.client.renderitems.ItemRocketRender;
 import weapons.client.renderitems.ItemRocktlauncherRender;
+import weapons.client.renderitems.ItemScarHRender;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -23,6 +24,7 @@ public class ClientProxy extends weapons.CommonOreProxy
 	{
 
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid, new ItemPistolRender());
+        MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 50, new ItemScarHRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 100, new ItemRocktlauncherRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 256, new ItemBulletRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 356, new ItemRocketRender());

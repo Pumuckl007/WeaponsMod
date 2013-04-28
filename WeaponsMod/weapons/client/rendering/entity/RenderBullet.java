@@ -27,7 +27,7 @@ public class RenderBullet extends Render
 		// Bind texture
         GL11.glScalef(0.1F, 0.1F, 0.1F);
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture("/mods/weapons/textures/models/bullet.png");
-		aModel.render(par1EntityBullet, par2, par4, par6, par1EntityBullet.directoinX, 0F, par1EntityBullet.directoinY);
+		aModel.render(par1EntityBullet, par2, par4, par6, par9);
 		
 		GL11.glPopMatrix();
         

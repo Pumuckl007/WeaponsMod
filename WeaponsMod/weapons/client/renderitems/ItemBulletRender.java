@@ -64,6 +64,10 @@ public class ItemBulletRender extends Render implements IItemRenderer {
 				renderBullet(1.0F, -1F, 0.0F, 0, 10F, 0F, 0.50F);
 				return;
 			}
+			case FIRST_PERSON_MAP:{
+				renderBullet(3F, 0.0F, 1.25F, 0F, 90F, 0F, 0.16F);
+				return;
+			}
 			default:
 				return;
 		}

@@ -64,6 +64,10 @@ public class ItemRocktlauncherRender extends Render implements IItemRenderer {
 				renderGun(0.5F, 0F, 0.0F, 0, 10F, 0F, 0.40F);
 				return;
 			}
+			case FIRST_PERSON_MAP:{
+				renderGun(1F, 0.0F, 1.25F, 0F, 17.5F, 0F, 0.40F);
+				return;
+			}
 			default:
 				return;
 		}

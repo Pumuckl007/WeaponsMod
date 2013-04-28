@@ -304,7 +304,7 @@ public class EntityRocket extends Entity implements IProjectile
 				 if (movingobjectposition.entityHit != null)
 				 {
 					 f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-					 int i1 = MathHelper.ceiling_double_int((double)f2 * this.damage);
+					 int i1 = 10;
 
 
 					 if(!this.worldObj.isRemote){

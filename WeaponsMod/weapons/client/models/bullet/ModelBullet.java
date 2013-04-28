@@ -20,11 +20,11 @@ public class ModelBullet extends ModelBase {
         modelBullet = AdvancedModelLoader.loadModel("/mods/weapons/models/bullet.obj");
     }
 
-    public void render(EntityBullet par1EntityBullet, double cx, double cy, double cz, float x, float y, float z) {
+    public void render(EntityBullet par1EntityBullet, double cx, double cy, double cz, float par9) {
         GL11.glTranslatef((float)cx, (float)cy, (float)cz);
-        GL11.glRotatef(x, 1, 0, 0);
-        GL11.glRotatef(y, 0, 1, 0);
-        GL11.glRotatef(z, 0, 0, 1);
+        GL11.glRotatef(90, 1, 0, 0);
+        GL11.glRotatef(par1EntityBullet.prevRotationYaw + (par1EntityBullet.rotationYaw - par1EntityBullet.prevRotationYaw) * par9, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(par1EntityBullet.prevRotationPitch + (par1EntityBullet.rotationPitch - par1EntityBullet.prevRotationPitch) * par9, 0.0F, 0.0F, 1.0F);
         modelBullet.renderAll();
     }
     public void render() {

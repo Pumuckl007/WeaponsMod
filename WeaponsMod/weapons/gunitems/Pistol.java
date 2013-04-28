@@ -46,7 +46,7 @@ public class Pistol extends ModItem {
             par2World.playSoundAtEntity(par3EntityPlayer, "random.explode", 1.0F, 1.0F / (10F) + 5);
             if (!par2World.isRemote)
             {
-                EntityBullet var8 = new EntityBullet(par2World, par3EntityPlayer, 42 * 2.0F, par3EntityPlayer.cameraPitch, par3EntityPlayer.cameraYaw);
+                EntityBullet var8 = new EntityBullet(par2World, par3EntityPlayer, 42 * 2.0F, 10);
                 par2World.spawnEntityInWorld(var8);
                 ClientTick.playerRecoil += 10;
             }

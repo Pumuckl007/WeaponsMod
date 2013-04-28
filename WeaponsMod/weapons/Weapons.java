@@ -2,6 +2,7 @@ package weapons;
 
 
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
@@ -14,6 +15,7 @@ import weapons.bullets.EntityRocket;
 import weapons.bullets.ItemBullet;
 import weapons.gunitems.Pistol;
 import weapons.gunitems.RocketLancher;
+import weapons.gunitems.ScarH;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -46,6 +48,7 @@ public class Weapons
 
 
 	public static Item pisol1;
+	public static Item mGun1;
 	public static Item rocketLancher1;
 	
 	public static Item bullet1;
@@ -120,15 +123,16 @@ public class Weapons
 
 		int gunid = bulletid - 256;
 
-		pisol1 = (new Pistol(gunid));
+		pisol1 = (new Pistol(gunid).setUnlocalizedName("1"));
+		mGun1 = (new ScarH(gunid + 50).setUnlocalizedName("5"));
+		rocketLancher1 = (new RocketLancher(gunid + 100).setUnlocalizedName("2"));
 		
-		rocketLancher1 = (new RocketLancher(gunid + 100));
+		bullet1 = (new ItemBullet(bulletid).setUnlocalizedName("3"));
 		
-		bullet1 = (new ItemBullet(bulletid));
-		
-		rocket1 = (new ItemBullet(bulletid + 100));
+		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("4"));
 
 		pisol1.setCreativeTab(weaponsTab);
+		mGun1.setCreativeTab(weaponsTab);
 		rocketLancher1.setCreativeTab(weaponsTab);
 		bullet1.setCreativeTab(weaponsTab);
 		rocket1.setCreativeTab(weaponsTab);
@@ -230,6 +234,7 @@ public class Weapons
 		LanguageRegistry.addName(bullet1, "RPD Police Beretta Ammo");
 		LanguageRegistry.addName(rocketLancher1, "RPG");
 		LanguageRegistry.addName(rocket1, "RPG Ammo");
+		LanguageRegistry.addName(mGun1, "Scar H");
 	}
 
 	public void otherNames(){
@@ -239,8 +244,6 @@ public class Weapons
 	public void recipes()
 	{
 
-		//		ItemStack dirtStack = new ItemStack(Block.dirt);
-		//		ItemStack gravelStack = new ItemStack(Block.gravel);
 
 				GameRegistry.addRecipe(new ItemStack(Weapons.bullet1, 32), 
 						" x ", 
@@ -250,7 +253,15 @@ public class Weapons
 						'x', Item.ingotIron,
 						'y',Item.blazePowder,
 						'z', Item.flint);
-		//		GameRegistry.addRecipe(new ItemStack(MoreOres.ISpewer, 1, 1), "y", 'y', MoreOres.ISpewer);
+				GameRegistry.addRecipe(new ItemStack(Weapons.rocket1, 3), 
+						" a ", 
+						"xwx", 
+						"yzy", 
+						'w', Block.tnt,
+						'x', Item.ingotIron,
+						'y',Item.blazePowder,
+						'z', Item.fireballCharge,
+						'a', Block.blockIron);
 
 	}
 
