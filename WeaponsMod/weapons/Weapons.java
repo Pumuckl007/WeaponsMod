@@ -182,25 +182,7 @@ public class Weapons
 	{
 		//		GameRegistry.registerCraftingHandler(craftHandler);	
 
-//		try
-//		{
-//			ISaveHandler worldsaver = world.getSaveHandler();
-//			IChunkLoader loader = worldsaver.getChunkLoader(world.provider);
-//			if(loader instanceof AnvilChunkLoader)
-//			{
-//				return ((AnvilChunkLoader)loader).chunkSaveLocation;
-//			}
-//			return null;
-//		}
-//		catch(IllegalAccessError e)
-//		{
-//			return ((WorldServer)world).getChunkSaveLocation();
-//		}
-//		catch(Exception e)
-//		{
-//			FMLCommonHandler.instance().raiseException(e, "Code Chicken Core", true);
-//			return null;
-//		}
+
 
 	}
 
