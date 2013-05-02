@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import weapons.ModItem;
 import weapons.Weapons;
 import weapons.bullets.EntityRocket;
-import weapons.client.ClientTick;
+import weapons.client.RenderTick;
 
 public class RocketLancher extends ModItem {
 
@@ -63,10 +63,10 @@ public class RocketLancher extends ModItem {
         if (!par2World.isRemote)
         {
             par2World.spawnEntityInWorld(var8);
-            ClientTick.playerRecoil += 10;
+            RenderTick.playerRecoil += 15;
         }
         else{
-        	ClientTick.playerRecoil += 10;
+        	RenderTick.playerRecoil += 15;
         }
 		
 	}

@@ -10,32 +10,18 @@ public class ClientTick implements ITickHandler {
 	
 
 
-	public static float playerRecoil = 0;
-	private float antiRecoil = 0;
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		// TODO Auto-generated method stub
-		updategunrecoil();
-		System.out.println("playerRecoil " + playerRecoil);
 		
 
 	}
 	
 
 
-	private void updategunrecoil()
-	{
-		if (playerRecoil > 0)
-			playerRecoil *= 0.8F;
-		ClientProxy.minecraft.thePlayer.rotationPitch -= playerRecoil;
-		antiRecoil += playerRecoil;
-
-		ClientProxy.minecraft.thePlayer.rotationPitch += antiRecoil * 0.2F;
-		antiRecoil *= 0.8F;
-
 		
-	}
+	
 
 
 

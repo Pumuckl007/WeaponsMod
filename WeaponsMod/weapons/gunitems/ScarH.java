@@ -12,7 +12,7 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import weapons.ModItem;
 import weapons.Weapons;
 import weapons.bullets.EntityBullet;
-import weapons.client.ClientTick;
+import weapons.client.RenderTick;
 
 public class ScarH extends ModItem {
 
@@ -66,10 +66,10 @@ public class ScarH extends ModItem {
 						{
 							EntityBullet var8 = new EntityBullet(par2World, player, 42 * 2.0F, 5);
 							par2World.spawnEntityInWorld(var8);
-							ClientTick.playerRecoil += 10;
+							RenderTick.playerRecoil += 2;
 						}
 						else{
-							ClientTick.playerRecoil += 10;
+							RenderTick.playerRecoil += 2;
 						}
 					}
 					else{

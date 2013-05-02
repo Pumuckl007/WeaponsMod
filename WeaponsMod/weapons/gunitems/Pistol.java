@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import weapons.ModItem;
 import weapons.Weapons;
 import weapons.bullets.EntityBullet;
-import weapons.client.ClientTick;
+import weapons.client.RenderTick;
 
 public class Pistol extends ModItem {
 
@@ -48,10 +48,10 @@ public class Pistol extends ModItem {
             {
                 EntityBullet var8 = new EntityBullet(par2World, par3EntityPlayer, 42 * 2.0F, 10);
                 par2World.spawnEntityInWorld(var8);
-                ClientTick.playerRecoil += 10;
+                RenderTick.playerRecoil += 10;
             }
             else{
-            	ClientTick.playerRecoil += 10;
+            	RenderTick.playerRecoil += 10;
             }
         }
         

@@ -2,6 +2,9 @@ package weapons;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
@@ -13,9 +16,11 @@ import net.minecraftforge.common.Property;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.bullets.ItemBullet;
+import weapons.gunitems.FT;
 import weapons.gunitems.Pistol;
 import weapons.gunitems.RocketLancher;
 import weapons.gunitems.ScarH;
+import weapons.speacalitems.ItemInfo;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -37,7 +42,6 @@ public class Weapons
 {
 	@SidedProxy(clientSide = "weapons.client.ClientProxy", serverSide = "weapons.CommonOreProxy")
 	public static CommonOreProxy proxy;
-
 	@Instance("Weapons")
 	public static Weapons instance;
 	public static int dimension = 2;
@@ -47,10 +51,15 @@ public class Weapons
 	public static boolean explosions;
 
 
+	public static Map<String, Integer> fTFuel = new HashMap<String, Integer>();
+
 	public static Item pisol1;
 	public static Item mGun1;
 	public static Item rocketLancher1;
+	public static Item flameThrower;
 	
+	public static Item info;
+
 	public static Item bullet1;
 	public static Item rocket1;
 
@@ -83,7 +92,7 @@ public class Weapons
 
 		int randomItemID = config.getItem("StartItemId", 15000).getInt();
 		bulletid = randomItemID;
-		
+
 		int entityid = config.get("EntityId", "EntityId", 400).getInt();
 		startEntityId = entityid;
 
@@ -102,6 +111,7 @@ public class Weapons
 		// boolean someBoolean = someProperty.getBoolean(true);
 
 		config.save();
+		proxy.serverInit();
 	}
 
 
@@ -122,20 +132,25 @@ public class Weapons
 
 
 		int gunid = bulletid - 256;
+		int specialid = bulletid + 256;
 
 		pisol1 = (new Pistol(gunid).setUnlocalizedName("1"));
 		mGun1 = (new ScarH(gunid + 50).setUnlocalizedName("5"));
 		rocketLancher1 = (new RocketLancher(gunid + 100).setUnlocalizedName("2"));
-		
+		flameThrower = (new FT(gunid + 125).setUnlocalizedName("6"));
+		info = (new ItemInfo(specialid).setUnlocalizedName("7"));
+
 		bullet1 = (new ItemBullet(bulletid).setUnlocalizedName("3"));
-		
+
 		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("4"));
 
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
 		rocketLancher1.setCreativeTab(weaponsTab);
+		flameThrower.setCreativeTab(weaponsTab);
 		bullet1.setCreativeTab(weaponsTab);
 		rocket1.setCreativeTab(weaponsTab);
+		info.setCreativeTab(weaponsTab);
 
 		registeringBlocks();
 		itemNames();
@@ -166,6 +181,27 @@ public class Weapons
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		//		GameRegistry.registerCraftingHandler(craftHandler);	
+
+//		try
+//		{
+//			ISaveHandler worldsaver = world.getSaveHandler();
+//			IChunkLoader loader = worldsaver.getChunkLoader(world.provider);
+//			if(loader instanceof AnvilChunkLoader)
+//			{
+//				return ((AnvilChunkLoader)loader).chunkSaveLocation;
+//			}
+//			return null;
+//		}
+//		catch(IllegalAccessError e)
+//		{
+//			return ((WorldServer)world).getChunkSaveLocation();
+//		}
+//		catch(Exception e)
+//		{
+//			FMLCommonHandler.instance().raiseException(e, "Code Chicken Core", true);
+//			return null;
+//		}
+
 	}
 
 
@@ -211,7 +247,7 @@ public class Weapons
 
 	private void addAchievementLocalizations()
 	{
-		
+
 	}
 
 
@@ -231,10 +267,12 @@ public class Weapons
 	public void itemNames()
 	{
 		LanguageRegistry.addName(pisol1, "RPD Police Beretta");
-		LanguageRegistry.addName(bullet1, "RPD Police Beretta Ammo");
+		LanguageRegistry.addName(bullet1, "Ammo");
 		LanguageRegistry.addName(rocketLancher1, "RPG");
+		LanguageRegistry.addName(flameThrower, "Flame Thrower");
 		LanguageRegistry.addName(rocket1, "RPG Ammo");
 		LanguageRegistry.addName(mGun1, "Scar H");
+		LanguageRegistry.addName(info, "foo");
 	}
 
 	public void otherNames(){
@@ -245,23 +283,23 @@ public class Weapons
 	{
 
 
-				GameRegistry.addRecipe(new ItemStack(Weapons.bullet1, 32), 
-						" x ", 
-						"xwx", 
-						"yzy", 
-						'w', Item.gunpowder,
-						'x', Item.ingotIron,
-						'y',Item.blazePowder,
-						'z', Item.flint);
-				GameRegistry.addRecipe(new ItemStack(Weapons.rocket1, 3), 
-						" a ", 
-						"xwx", 
-						"yzy", 
-						'w', Block.tnt,
-						'x', Item.ingotIron,
-						'y',Item.blazePowder,
-						'z', Item.fireballCharge,
-						'a', Block.blockIron);
+		GameRegistry.addRecipe(new ItemStack(Weapons.bullet1, 32), 
+				" x ", 
+				"xwx", 
+				"yzy", 
+				'w', Item.gunpowder,
+				'x', Item.ingotIron,
+				'y',Item.blazePowder,
+				'z', Item.flint);
+		GameRegistry.addRecipe(new ItemStack(Weapons.rocket1, 3), 
+				" a ", 
+				"xwx", 
+				"yzy", 
+				'w', Block.tnt,
+				'x', Item.ingotIron,
+				'y',Item.blazePowder,
+				'z', Item.fireballCharge,
+				'a', Block.blockIron);
 
 	}
 
