@@ -13,7 +13,10 @@ import org.lwjgl.opengl.GL11;
 import weapons.armor.ItemJetPack;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModelJetPack extends ModelBiped {
 	protected static ModelJetPack instance;
 	private ModeljetPack aModel = new ModeljetPack();

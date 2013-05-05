@@ -57,101 +57,104 @@ ISpecialArmor {
 
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack)
 	{
-		if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
-			toggle = true;
-		}
-		else{
-			toggle = false;
-			togglecooldown = true;
-		}
-		if(toggle && togglecooldown){
-			togglecooldown = false;
-			if(ItemJetPack.isflying){
-				ItemJetPack.isflying = false;
-				player.addChatMessage(EnumChatFormatting.DARK_RED + "Jet Pack is now Disabled.");
+		if(world.isRemote){
+			if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
+				toggle = true;
 			}
 			else{
-				ItemJetPack.isflying = true;
-				player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Jet Pack is now Enabled.");
+				toggle = false;
+				togglecooldown = true;
 			}
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
-			toggle2 = true;
-		}
-		else{
-			toggle2 = false;
-			togglecooldown2 = true;
-		}
-		if(toggle2 && togglecooldown2){
-			togglecooldown2 = false;
-			if(ItemJetPack.flyingspeed < 5){
-				ItemJetPack.flyingspeed += 1;
-			}
-			else if(flyingspeed < 10){
-				flyingspeed = 10;
-			}
-			else{
-				flyingspeed = 1;
-			}
-			player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Throtle set to " + ItemJetPack.flyingspeed + ".");
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_CAPITAL)) {
-			toggle3 = true;
-		}
-		else{
-			toggle3 = false;
-			togglecooldown3 = true;
-		}
-		if(toggle3 && togglecooldown3){
-			togglecooldown3 = false;
-			ItemJetPack.jumpcooldown = 200;
-		}
-		if(ItemJetPack.jumpcooldown != -1){
-			if(ItemJetPack.jumpcooldown <= 0){
-				player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Warp jumping " + Math.pow(50, ItemJetPack.flyingspeed) + " blocks!");
-				ItemJetPack.jumpcooldown = -1;
+			if(toggle && togglecooldown){
+				togglecooldown = false;
 				if(ItemJetPack.isflying){
-					double volocityX;
-					double volocityY = 0;
-					double volocityZ = 0;
-					volocityX = Math.cos(Math.toRadians(player.rotationPitch)) * Math.sin(Math.toRadians(player.rotationYawHead) + Math.PI) * 50;
-					volocityZ = Math.cos(Math.toRadians(player.rotationPitch)) * Math.cos(Math.toRadians(player.rotationYawHead)) * 50;
-					volocityY = Math.sin(Math.toRadians(player.rotationPitch) + Math.PI) * 50;
-					volocityX = Math.pow(volocityX, ItemJetPack.flyingspeed);
-					volocityY = Math.pow(volocityY, ItemJetPack.flyingspeed);
-					volocityZ = Math.pow(volocityZ, ItemJetPack.flyingspeed);
-					double startX = player.posX + volocityX;
-					double startY = player.posY + volocityY + 1;
-					double startZ = player.posZ + volocityZ;
-					player.setPositionAndUpdate(startX, startY, startZ);
-					player.fallDistance = 0;
+					ItemJetPack.isflying = false;
+					player.addChatMessage(EnumChatFormatting.DARK_RED + "Jet Pack is now Disabled.");
+				}
+				else{
+					ItemJetPack.isflying = true;
+					player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Jet Pack is now Enabled.");
 				}
 			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+				toggle2 = true;
+			}
 			else{
-				int time = (ItemJetPack.jumpcooldown / 20) + 1;
-				player.addChatMessage(EnumChatFormatting.GOLD + "Warp jumping in " + time + "! Press X to cancel!");
-				ItemJetPack.jumpcooldown -= 1;
+				toggle2 = false;
+				togglecooldown2 = true;
+			}
+			if(toggle2 && togglecooldown2){
+				togglecooldown2 = false;
+				if(ItemJetPack.flyingspeed < 5){
+					ItemJetPack.flyingspeed += 1;
 				}
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_X)) {
-			toggle4 = true;
-		}
-		else{
-			toggle4 = false;
-			togglecooldown4 = true;
-		}
-		if(toggle4 && togglecooldown4){
-			togglecooldown4 = false;
-			ItemJetPack.jumpcooldown = -1;
-			player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Warp jump canceled!");
-		}
-		super.onArmorTickUpdate(world, player, itemStack);
-		if(ItemJetPack.isflying){
-			updateflying(player);
-			PotionEffect potion = new PotionEffect(14, 2);
-			player.addPotionEffect(potion);
+				else if(flyingspeed < 10){
+					flyingspeed = 10;
+				}
+				else{
+					flyingspeed = 1;
+				}
+				player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Throtle set to " + ItemJetPack.flyingspeed + ".");
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_CAPITAL)) {
+				toggle3 = true;
+			}
+			else{
+				toggle3 = false;
+				togglecooldown3 = true;
+			}
+			if(toggle3 && togglecooldown3){
+				togglecooldown3 = false;
+				ItemJetPack.jumpcooldown = 200;
+			}
+			if(ItemJetPack.jumpcooldown != -1){
+				if(ItemJetPack.jumpcooldown <= 0){
+					player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Warp jumping " + Math.pow(50, ItemJetPack.flyingspeed) + " blocks!");
+					ItemJetPack.jumpcooldown = -1;
+					if(ItemJetPack.isflying){
+						double volocityX;
+						double volocityY = 0;
+						double volocityZ = 0;
+						volocityX = Math.cos(Math.toRadians(player.rotationPitch)) * Math.sin(Math.toRadians(player.rotationYawHead) + Math.PI) * 50;
+						volocityZ = Math.cos(Math.toRadians(player.rotationPitch)) * Math.cos(Math.toRadians(player.rotationYawHead)) * 50;
+						volocityY = Math.sin(Math.toRadians(player.rotationPitch) + Math.PI) * 50;
+						volocityX = Math.pow(volocityX, ItemJetPack.flyingspeed);
+						volocityY = Math.pow(volocityY, ItemJetPack.flyingspeed);
+						volocityZ = Math.pow(volocityZ, ItemJetPack.flyingspeed);
+						double startX = player.posX + volocityX;
+						double startY = player.posY + volocityY + 1;
+						double startZ = player.posZ + volocityZ;
+						player.setPositionAndUpdate(startX, startY, startZ);
+						player.fallDistance = 0;
+					}
+				}
+				else{
+					int time = (ItemJetPack.jumpcooldown / 20) + 1;
+					player.addChatMessage(EnumChatFormatting.GOLD + "Warp jumping in " + time + "! Press X to cancel!");
+					ItemJetPack.jumpcooldown -= 1;
+				}
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_X)) {
+				toggle4 = true;
+			}
+			else{
+				toggle4 = false;
+				togglecooldown4 = true;
+			}
+			if(toggle4 && togglecooldown4){
+				togglecooldown4 = false;
+				ItemJetPack.jumpcooldown = -1;
+				player.addChatMessage(EnumChatFormatting.DARK_GREEN + "Warp jump canceled!");
+			}
+			super.onArmorTickUpdate(world, player, itemStack);
+			if(ItemJetPack.isflying){
+				updateflying(player);
+				PotionEffect potion = new PotionEffect(14, 2);
+				player.addPotionEffect(potion);
+			}
 		}
 
 	}
