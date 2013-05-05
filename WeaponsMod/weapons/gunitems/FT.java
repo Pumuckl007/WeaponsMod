@@ -217,7 +217,7 @@ public class FT extends ModItem {
 		}
 		else{
 			color = EnumChatFormatting.AQUA;
-			par3List.add(color + "\u00A7o" + "Fuel Is Not Supported In multiplayer Yet!");
+			par3List.add(color + "\u00A7o" + "Fuel Is Not Supported In Multiplayer Yet!");
 		}
 	}
 

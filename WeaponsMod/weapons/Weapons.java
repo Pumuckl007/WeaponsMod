@@ -11,12 +11,15 @@ import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
+import weapons.armor.ItemJetPack;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.bullets.ItemBullet;
 import weapons.gunitems.FT;
+import weapons.gunitems.IceBallLauncher;
 import weapons.gunitems.Pistol;
 import weapons.gunitems.RocketLancher;
 import weapons.gunitems.ScarH;
@@ -52,16 +55,20 @@ public class Weapons
 
 
 	public static Map<String, Integer> fTFuel = new HashMap<String, Integer>();
+	public static Map<String, Integer> iceBalls = new HashMap<String, Integer>();
 
 	public static Item pisol1;
 	public static Item mGun1;
 	public static Item rocketLancher1;
 	public static Item flameThrower;
+	public static Item iceBallLauncher;
 	
 	public static Item info;
 
 	public static Item bullet1;
 	public static Item rocket1;
+	
+	public static Item jetPack;
 
 
 	public static String errorString = "";
@@ -139,18 +146,22 @@ public class Weapons
 		rocketLancher1 = (new RocketLancher(gunid + 100).setUnlocalizedName("2"));
 		flameThrower = (new FT(gunid + 125).setUnlocalizedName("6"));
 		info = (new ItemInfo(specialid).setUnlocalizedName("7"));
+		iceBallLauncher = (new IceBallLauncher(gunid + 80).setUnlocalizedName("8"));
 
 		bullet1 = (new ItemBullet(bulletid).setUnlocalizedName("3"));
 
 		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("4"));
+		jetPack = (new ItemJetPack(specialid + 40, 0, 1).setUnlocalizedName("9"));
 
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
+		iceBallLauncher.setCreativeTab(weaponsTab);
 		rocketLancher1.setCreativeTab(weaponsTab);
 		flameThrower.setCreativeTab(weaponsTab);
 		bullet1.setCreativeTab(weaponsTab);
 		rocket1.setCreativeTab(weaponsTab);
 		info.setCreativeTab(weaponsTab);
+		jetPack.setCreativeTab(weaponsTab);
 
 		registeringBlocks();
 		itemNames();
@@ -255,6 +266,11 @@ public class Weapons
 		LanguageRegistry.addName(rocket1, "RPG Ammo");
 		LanguageRegistry.addName(mGun1, "Scar H");
 		LanguageRegistry.addName(info, "foo");
+		LanguageRegistry.addName(iceBallLauncher,"Ice Ball Launcher");
+		LanguageRegistry.addName(jetPack,"JetPack");
+	}
+	public EnumChatFormatting Color(String Color){
+		return EnumChatFormatting.valueOf(Color);
 	}
 
 	public void otherNames(){

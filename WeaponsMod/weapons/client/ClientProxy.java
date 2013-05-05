@@ -4,12 +4,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import weapons.Weapons;
+import weapons.bullets.EnityIceBall;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.client.rendering.entity.RenderBullet;
+import weapons.client.rendering.entity.RenderIceBall;
 import weapons.client.rendering.entity.RenderRocket;
 import weapons.client.renderitems.ItemBulletRender;
 import weapons.client.renderitems.ItemFTRender;
+import weapons.client.renderitems.ItemIceBallLauncherRender;
 import weapons.client.renderitems.ItemInfoRender;
 import weapons.client.renderitems.ItemPistolRender;
 import weapons.client.renderitems.ItemRocketRender;
@@ -31,6 +34,7 @@ public class ClientProxy extends weapons.CommonOreProxy
 		TickRegistry.registerTickHandler(new ClientTick(), Side.CLIENT);
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid, new ItemPistolRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 50, new ItemScarHRender());
+        MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 80, new ItemIceBallLauncherRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 100, new ItemRocktlauncherRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 125, new ItemFTRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 256, new ItemBulletRender());
@@ -38,6 +42,7 @@ public class ClientProxy extends weapons.CommonOreProxy
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 512, new ItemInfoRender());
         RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet(0.1F));
         RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, new RenderRocket(0.1F));
+        RenderingRegistry.registerEntityRenderingHandler(EnityIceBall.class, new RenderIceBall());
 		
 	}
 	@Override

@@ -12,6 +12,10 @@ public class ServerTick implements ITickHandler {
 
 	private int savecooldown = 0;
 	private SaveFTStats ft;
+	private SaveIceBalls iceballs;
+	public World world;
+	@SuppressWarnings("unused")
+	private int playercheck = 0;
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -19,8 +23,11 @@ public class ServerTick implements ITickHandler {
 		if(type.contains(TickType.WORLDLOAD))
 		{
 			ServerConfig.load((World)tickData[0]);
+			world = (World)tickData[0];
 			ft = new SaveFTStats(CommonUtils.getWorldBaseSaveLocation(((World)tickData[0])));
+			iceballs = new SaveIceBalls(CommonUtils.getWorldBaseSaveLocation(((World)tickData[0])));
 			Weapons.fTFuel = ft.getFuelLevel();
+			Weapons.iceBalls = iceballs.getFuelLevel();
 		}
 		if(type.contains(TickType.WORLD))
 		{
@@ -28,11 +35,44 @@ public class ServerTick implements ITickHandler {
 				savecooldown = 300;
 				ft.setFuelLevel(Weapons.fTFuel);
 				ft.save();
+				iceballs.setFuelLevel(Weapons.fTFuel);
+				iceballs.save();
+			}
+			else{
+				savecooldown--;
 			}
 		}
-		else{
-			savecooldown--;
-		}
+//		if(type.contains(TickType.WORLD))
+//		{
+//			if(playercheck <= 0){
+//				playercheck = 5;
+//				String players = MinecraftServer.getServer().getConfigurationManager().getPlayerListAsString();
+//				List<String> player = Arrays.asList(players.split(","));
+//				for (String s : player){
+//					EntityPlayer playere = world.;
+//					if(playere != null){
+//						System.out.println(playere.username);
+//						if(playere.inventory != null){
+//							ItemStack[] armor = playere.inventory.armorInventory;
+//							if(armor[2].itemID == Weapons.jetPack.itemID){
+//								PotionEffect potion = new PotionEffect(14, 2);
+//								playere.addPotionEffect(potion);
+//							}
+//							else{
+//								System.out.println(armor[1].itemID);
+//								System.out.println(armor[2].itemID);
+//								System.out.println(armor[3].itemID);
+//								System.out.println(armor[4].itemID);
+//							}
+//						}
+//					}
+//				}
+//
+//			}
+//			else{
+//				playercheck --;
+//			}
+//		}
 	}
 
 
