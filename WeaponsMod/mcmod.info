@@ -5,7 +5,7 @@
   "description": "Adding New Weapons And Other Things",
   "version": "pre0.1A",
   "mcversion": "1.5.1",
-  "logoFile": "/mcp.png",
+  "logoFile": "/mods/weapons/textures/logo/logo.png",
   "url": "None",
   "updateUrl": "",
   "authors": ["Max_of_max"],

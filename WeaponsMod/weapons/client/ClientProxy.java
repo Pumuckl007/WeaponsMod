@@ -14,6 +14,8 @@ import weapons.client.renderitems.ItemBulletRender;
 import weapons.client.renderitems.ItemFTRender;
 import weapons.client.renderitems.ItemIceBallLauncherRender;
 import weapons.client.renderitems.ItemInfoRender;
+import weapons.client.renderitems.ItemJetBootsRender;
+import weapons.client.renderitems.ItemJetPackRender;
 import weapons.client.renderitems.ItemPistolRender;
 import weapons.client.renderitems.ItemRocketRender;
 import weapons.client.renderitems.ItemRocktlauncherRender;
@@ -40,6 +42,8 @@ public class ClientProxy extends weapons.CommonOreProxy
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 256, new ItemBulletRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 356, new ItemRocketRender());
         MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 512, new ItemInfoRender());
+        MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 552, new ItemJetPackRender());
+        MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 553, new ItemJetBootsRender());
         RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet(0.1F));
         RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, new RenderRocket(0.1F));
         RenderingRegistry.registerEntityRenderingHandler(EnityIceBall.class, new RenderIceBall());

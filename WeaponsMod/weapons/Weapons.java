@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
+import weapons.armor.ItemJetBoots;
 import weapons.armor.ItemJetPack;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
@@ -69,6 +70,7 @@ public class Weapons
 	public static Item rocket1;
 	
 	public static Item jetPack;
+	public static Item jetBoots;
 
 
 	public static String errorString = "";
@@ -152,6 +154,7 @@ public class Weapons
 
 		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("4"));
 		jetPack = (new ItemJetPack(specialid + 40, 0, 1).setUnlocalizedName("9"));
+		jetBoots = (new ItemJetBoots(specialid + 41, 0, 3).setUnlocalizedName("10"));
 
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
@@ -162,6 +165,7 @@ public class Weapons
 		rocket1.setCreativeTab(weaponsTab);
 		info.setCreativeTab(weaponsTab);
 		jetPack.setCreativeTab(weaponsTab);
+		jetBoots.setCreativeTab(weaponsTab);
 
 		registeringBlocks();
 		itemNames();
@@ -268,6 +272,7 @@ public class Weapons
 		LanguageRegistry.addName(info, "foo");
 		LanguageRegistry.addName(iceBallLauncher,"Ice Ball Launcher");
 		LanguageRegistry.addName(jetPack,"JetPack");
+		LanguageRegistry.addName(jetBoots,"Jet Boots");
 	}
 	public EnumChatFormatting Color(String Color){
 		return EnumChatFormatting.valueOf(Color);

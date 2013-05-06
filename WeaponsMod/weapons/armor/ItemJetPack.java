@@ -16,7 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
-import weapons.client.models.ModelJetPack;
+import weapons.client.models.armor.ModelJetPack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -152,9 +152,11 @@ ISpecialArmor {
 			super.onArmorTickUpdate(world, player, itemStack);
 			if(ItemJetPack.isflying){
 				updateflying(player);
-				PotionEffect potion = new PotionEffect(14, 2);
-				player.addPotionEffect(potion);
 			}
+		}
+		if(ItemJetPack.isflying){
+			PotionEffect potion = new PotionEffect(14, 2);
+			player.addPotionEffect(potion);
 		}
 
 	}
