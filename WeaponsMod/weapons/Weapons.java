@@ -14,8 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
+import weapons.armor.ItemInfoHelmet;
 import weapons.armor.ItemJetBoots;
 import weapons.armor.ItemJetPack;
+import weapons.blocks.BlockDeath;
+import weapons.blocks.BlockWeaponCarver;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.bullets.ItemBullet;
@@ -24,6 +27,7 @@ import weapons.gunitems.IceBallLauncher;
 import weapons.gunitems.Pistol;
 import weapons.gunitems.RocketLancher;
 import weapons.gunitems.ScarH;
+import weapons.network.PacketHandler;
 import weapons.speacalitems.ItemInfo;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -35,18 +39,27 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "weapons", name = "weapons mod", version = "pre0.1A")
-@NetworkMod(channels = { "weapons" }, clientSideRequired = true, serverSideRequired = false)//, packetHandler = OrePacketHandler.class)
+@Mod(modid = "weapons",
+name = "Weapons Mod",
+version = "@VERSION@ (build @BUILD_NUMBER@)",
+dependencies = "required-after:Forge@[7.8.0.686,)",
+certificateFingerprint = "@FINGERPRINT@")
+@NetworkMod(
+        channels = { "weapons" },
+        clientSideRequired = true,
+        serverSideRequired = false,
+        packetHandler = PacketHandler.class)
 
 public class Weapons
 {
-	@SidedProxy(clientSide = "weapons.client.ClientProxy", serverSide = "weapons.CommonOreProxy")
-	public static CommonOreProxy proxy;
-	@Instance("Weapons")
+	@SidedProxy(clientSide = "weapons.client.ClientProxy", serverSide = "weapons.CommonProxy")
+	public static CommonProxy proxy;
+	@Instance("weapons")
 	public static Weapons instance;
 	public static int dimension = 2;
 	public static int dimensionJCE = 3;
@@ -57,6 +70,9 @@ public class Weapons
 
 	public static Map<String, Integer> fTFuel = new HashMap<String, Integer>();
 	public static Map<String, Integer> iceBalls = new HashMap<String, Integer>();
+	
+	public static Block weaponCarver;
+	public static Block death;
 
 	public static Item pisol1;
 	public static Item mGun1;
@@ -71,6 +87,7 @@ public class Weapons
 	
 	public static Item jetPack;
 	public static Item jetBoots;
+	public static Item infoHelmet;
 
 
 	public static String errorString = "";
@@ -86,12 +103,14 @@ public class Weapons
 	public static int yourblockModelId4;
 	public static int startBlockID;
 	public static int bulletid;
+	
+	public static int guiWeaponCraver = 0;
 
 
 	@PreInit
 	public void initConfig(FMLPreInitializationEvent fpe)
 	{
-
+		
 		Configuration config = new Configuration(fpe.getSuggestedConfigurationFile());
 
 		config.load();
@@ -120,15 +139,15 @@ public class Weapons
 		// boolean someBoolean = someProperty.getBoolean(true);
 
 		config.save();
+		weaponCarver = (new BlockWeaponCarver(startBlockID));
+		death = (new BlockDeath(startBlockID + 1));
+		GameRegistry.registerBlock(weaponCarver, "WeaponCarver");
+		GameRegistry.registerBlock(death, "Death");
 		proxy.serverInit();
+		proxy.registerKeyBindingHandler();
 	}
 
-
-
-
-
-
-
+	public static weapons.network.GuiHandler guiHandler = new weapons.network.GuiHandler();
 
 	@SuppressWarnings("static-access")
 	@Init
@@ -136,12 +155,15 @@ public class Weapons
 	public void load(FMLInitializationEvent fie)
 	{
 
+        NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
 		this.addAchievementLocalizations();
 
 
 
 		int gunid = bulletid - 256;
 		int specialid = bulletid + 256;
+		
+		
 
 		pisol1 = (new Pistol(gunid).setUnlocalizedName("1"));
 		mGun1 = (new ScarH(gunid + 50).setUnlocalizedName("5"));
@@ -153,8 +175,9 @@ public class Weapons
 		bullet1 = (new ItemBullet(bulletid).setUnlocalizedName("3"));
 
 		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("4"));
-		jetPack = (new ItemJetPack(specialid + 40, 0, 1).setUnlocalizedName("9"));
-		jetBoots = (new ItemJetBoots(specialid + 41, 0, 3).setUnlocalizedName("10"));
+		jetPack = (new ItemJetPack(specialid + 41, 0, 1).setUnlocalizedName("9"));
+		jetBoots = (new ItemJetBoots(specialid + 43, 0, 3).setUnlocalizedName("10"));
+		infoHelmet = (new ItemInfoHelmet(specialid + 40, 0, 0).setUnlocalizedName("11"));
 
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
@@ -166,7 +189,10 @@ public class Weapons
 		info.setCreativeTab(weaponsTab);
 		jetPack.setCreativeTab(weaponsTab);
 		jetBoots.setCreativeTab(weaponsTab);
-
+		infoHelmet.setCreativeTab(weaponsTab);
+		
+		proxy.initTileEntities();
+		
 		registeringBlocks();
 		itemNames();
 		recipes();
@@ -178,14 +204,14 @@ public class Weapons
 
 
 
-
 		//Minecraft Forge Preload Textures
 
 		EntityRegistry.registerModEntity(EntityBullet.class, "bullet", this.getUniqueEntityId(), this, 80, 3, true);
 		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.bullet.name", "bullet");
 		EntityRegistry.registerModEntity(EntityRocket.class, "rocket", this.getUniqueEntityId(), this, 80, 3, true);
 		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.rocket.name", "rocket");
-
+		EntityRegistry.registerModEntity(EntityRocket.class, "iceball", this.getUniqueEntityId(), this, 80, 3, true);
+		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.iceball.name", "iceball");
 
 		proxy.load();
 		proxy.loadSound();
@@ -252,13 +278,12 @@ public class Weapons
 
 	public void registeringBlocks()
 	{
-
-
 	}
 
 	public void blockNames()
 	{
-
+		LanguageRegistry.addName(weaponCarver,"Weapon Carver");
+		LanguageRegistry.addName(death,Color("DARK_RED") + "Death");
 	}
 
 	public void itemNames()
@@ -269,10 +294,11 @@ public class Weapons
 		LanguageRegistry.addName(flameThrower, "Flame Thrower");
 		LanguageRegistry.addName(rocket1, "RPG Ammo");
 		LanguageRegistry.addName(mGun1, "Scar H");
-		LanguageRegistry.addName(info, "foo");
+		LanguageRegistry.addName(info, "Hand Held Information Reader");
 		LanguageRegistry.addName(iceBallLauncher,"Ice Ball Launcher");
 		LanguageRegistry.addName(jetPack,"JetPack");
 		LanguageRegistry.addName(jetBoots,"Jet Boots");
+		LanguageRegistry.addName(infoHelmet,"Information Helmet");
 	}
 	public EnumChatFormatting Color(String Color){
 		return EnumChatFormatting.valueOf(Color);

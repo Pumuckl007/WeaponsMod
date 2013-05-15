@@ -1,6 +1,7 @@
 package weapons.bullets;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentThorns;
@@ -502,6 +503,8 @@ public class EntityBullet extends Entity implements IProjectile
 
 								if (var4 > 0)
 								{
+									@SuppressWarnings("unused")
+									Random rand;
 									this.worldObj.spawnParticle("tilecrack_" + var4 + "_" + this.worldObj.getBlockMetadata(k1, l1-1, i2), this.posX + ((double)this.rand.nextFloat() - 0.5D) * (double)this.width, this.boundingBox.minY + 0.1D, this.posZ + ((double)this.rand.nextFloat() - 0.5D) * (double)this.width, -this.motionX * 4.0D, 1.5D, -this.motionZ * 4.0D);
 								}							
 							}
