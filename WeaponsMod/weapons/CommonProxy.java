@@ -1,12 +1,17 @@
 package weapons;
 
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import weapons.client.gui.GuiSicurityStorage;
 import weapons.client.gui.GuiWeaponCarver;
-import weapons.container.ContainerWeaponCarver;
+import weapons.inventory.ContainerSicurityStorage;
+import weapons.inventory.ContainerWeaponCarver;
 import weapons.server.ServerTick;
 import weapons.tileentity.TileEntityDeath;
+import weapons.tileentity.TileEntityProjetor;
+import weapons.tileentity.TileEntitySicurityStorage;
 import weapons.tileentity.TileEntityWeaponCarver;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -24,6 +29,9 @@ public class CommonProxy implements IGuiHandler
 	}
 	public void serverInit(){
 		TickRegistry.registerTickHandler(new ServerTick(), Side.SERVER);
+	}
+	public void spawnParticle(EntityFX particle){
+		
 	}
 
 
@@ -45,19 +53,26 @@ public class CommonProxy implements IGuiHandler
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z){
 
-		if (ID == 0){
-            TileEntityWeaponCarver tileWeaponCarver = (TileEntityWeaponCarver) world.getBlockTileEntity(x, y, z);
+		if (ID == Weapons.guiWeaponCraver){
+			TileEntityWeaponCarver tileWeaponCarver = (TileEntityWeaponCarver) world.getBlockTileEntity(x, y, z);
             return new ContainerWeaponCarver(player.inventory, tileWeaponCarver);
-            }
-
+        }
+        if (ID == Weapons.guiSicurityStorage){
+        	TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
+            return new ContainerSicurityStorage(player.inventory, tile);
+        }
 		return null;
 	}
 	@Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
-        if (ID == 0){
+        if (ID == Weapons.guiWeaponCraver){
             TileEntityWeaponCarver tileWeaponCarver = (TileEntityWeaponCarver) world.getBlockTileEntity(x, y, z);
             return new GuiWeaponCarver(player.inventory, tileWeaponCarver);
+        }
+        if (ID == Weapons.guiSicurityStorage){
+        	TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
+            return new GuiSicurityStorage(player.inventory, tile);
         }
 
         return null;
@@ -67,6 +82,8 @@ public class CommonProxy implements IGuiHandler
 
 		GameRegistry.registerTileEntity(TileEntityWeaponCarver.class, "weaponCarver");
 		GameRegistry.registerTileEntity(TileEntityDeath.class, "death");
+		GameRegistry.registerTileEntity(TileEntityProjetor.class, "projetor");
+		GameRegistry.registerTileEntity(TileEntitySicurityStorage.class, "sicurityStorage");
 	}
 
 	public void sayClient(String message){

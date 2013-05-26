@@ -19,13 +19,61 @@ public class RenderTick implements ITickHandler{
 	public static float playerRecoil = 0;
 	private float antiRecoil = 0;
 	protected static InfoHelmet info;
+	public static Double[] hight;
+	public static double r = 255;
+	public static double g = 5;
+	public static double b = 234;
+	public static double alpha = 100;
+	public static float radius = 0.02F;
+	public static boolean radiusmax = false;
+	public static boolean rmax = false;
+	public static boolean gmax = false;
+	public static boolean bmax = false;
+	public static boolean amax = false;
+	private int init = -1;
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
+		if(init != 1){
+			init = 1;
+			hight = new Double[2];
+			hight[0] = (double) 0;
+			hight[1] = (double) 0;
+		}
 		updategunrecoil();
-
+		updateSS();
 	}
 
+	private void updateSS(){
+		hight[0] += 0.0056543356;
+		hight[1] += 0.0074522415;
+		if(radius > 0.025){
+			radiusmax = true;
+		}
+		if(radius < 0.015){
+			radiusmax = false;
+		}
+		if(radiusmax){
+			radius -= 0.0003;
+		}
+		else{
+			radius += 0.0003;
+		}
+		
+		if(r > 255){
+			rmax = true;
+		}
+		if(r < 250){
+			rmax = false;
+		}
+		if(rmax){
+			r -= 0.001;
+		}
+		else{
+			r += 0.001;
+		}
+		alpha = ((radius - 0.02) * 4000) + 100;
+	}
 
 	private void updategunrecoil()
 	{

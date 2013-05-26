@@ -21,6 +21,7 @@ public class KeyHandeler extends KeyHandler
 	protected static KeyBinding jpthrotle = new KeyBinding("JetPack Throtle Key", Keyboard.KEY_C);
 	protected static KeyBinding jetpackWarpCancel = new KeyBinding("JetPack Warp Cancel Key", Keyboard.KEY_X);
 	protected static KeyBinding jpEnable = new KeyBinding("Enable JetPack Key", Keyboard.KEY_F);
+	protected static KeyBinding spaceshipup = new KeyBinding("Space Ship up", Keyboard.KEY_SPACE);
 
 	Minecraft mc;
 
@@ -32,13 +33,15 @@ public class KeyHandeler extends KeyHandler
 				jpthrotle,
 				jetpackWarpCancel,
 				jpEnable,
+				spaceshipup,
 				},
 				new boolean[]
 						{
 				true, // JetPack Warp Key
 				true, // JetPack Throtle Key
 				true, // JetPack Warp Cancel Key
-				true  // Enable JetPack Key
+				true,  // Enable JetPack Key
+				true  // space ship up Key
 						});
 
 		mc = Minecraft.getMinecraft();
@@ -56,6 +59,7 @@ public class KeyHandeler extends KeyHandler
 		if(mc.currentScreen != null || tickEnd)
 			return;
 
+		@SuppressWarnings("unused")
 		int keyNum = -1;
 		boolean handled = true;
 
@@ -68,53 +72,55 @@ public class KeyHandeler extends KeyHandler
 			keyNum = 2;
 		else if(kb == jpEnable)
 			keyNum = 3;
-
+		else if(kb == spaceshipup)
+			keyNum = 4;
 		else
 			handled = false;
-		if (keyNum > -1 && keyNum < 7)
+//		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+//			keyNum = 4;
+//		}
+//		if (keyNum > 5 && keyNum < 3)
+//		{
+//			EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+//			EventShipControl event = new EventShipControl(player.username, keyNum);
+//			MinecraftForge.EVENT_BUS.post(event);
+//			System.out.println("posed event: " + player.username);
+//		}
+
+
+
+
+		EntityPlayer player = mc.thePlayer;
+		Entity entityTest  = player.ridingEntity;
+
+		if (entityTest != null && handled == true)
 		{
-
-			//        AinchentShipControlEvent event = new AinchentShipControlEvent(keyNum);
-			//        MinecraftForge.EVENT_BUS.post(event);
-			//		}
-			//		
-			//        ZaperStrikeLighningEvent event2 = new ZaperStrikeLighningEvent(keyNum);
-			//        MinecraftForge.EVENT_BUS.post(event2);
-
-
-
-
-			EntityPlayer player = mc.thePlayer;
-			Entity entityTest  = player.ridingEntity;
-
-			if (entityTest != null && handled == true)
+			if (kb.keyCode == mc.gameSettings.keyBindInventory.keyCode)
 			{
-				if (kb.keyCode == mc.gameSettings.keyBindInventory.keyCode)
-				{
-					mc.gameSettings.keyBindInventory.pressed = false;
-					mc.gameSettings.keyBindInventory.pressTime = 0;
-				}
-
-				//if (handled)
-				//	PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
+				mc.gameSettings.keyBindInventory.pressed = false;
+				mc.gameSettings.keyBindInventory.pressTime = 0;
 			}
-			else
-				handled = false;
+
+			//if (handled)
+			//	PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
+		}
+		else
+			handled = false;
 
 
-			if (handled == true)
-				return;
+		if (handled == true)
+			return;
 
-			for (KeyBinding key : mc.gameSettings.keyBindings )
+		for (KeyBinding key : mc.gameSettings.keyBindings )
+		{
+			if (kb.keyCode == key.keyCode && key != kb)
 			{
-				if (kb.keyCode == key.keyCode && key != kb)
-				{
-					key.pressed = true;
-					key.pressTime = 1;
-				}
+				key.pressed = true;
+				key.pressTime = 1;
 			}
 		}
 	}
+
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)

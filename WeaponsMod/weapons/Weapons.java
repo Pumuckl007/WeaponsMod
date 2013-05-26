@@ -11,17 +11,22 @@ import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import weapons.armor.ItemInfoHelmet;
 import weapons.armor.ItemJetBoots;
 import weapons.armor.ItemJetPack;
 import weapons.blocks.BlockDeath;
+import weapons.blocks.BlockProjetor;
+import weapons.blocks.BlockSicurityStorage;
 import weapons.blocks.BlockWeaponCarver;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.bullets.ItemBullet;
+import weapons.entity.EntitySpaceShip;
+import weapons.entity.EntitySpeeder;
+import weapons.events.EventShipControl;
 import weapons.gunitems.FT;
 import weapons.gunitems.IceBallLauncher;
 import weapons.gunitems.Pistol;
@@ -29,6 +34,9 @@ import weapons.gunitems.RocketLancher;
 import weapons.gunitems.ScarH;
 import weapons.network.PacketHandler;
 import weapons.speacalitems.ItemInfo;
+import weapons.speacalitems.ItemSpaceShip;
+import weapons.speacalitems.ItemSpeeder;
+import weapons.utils.Color;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -67,12 +75,14 @@ public class Weapons
 	public static boolean inMCP = false;
 	public static boolean explosions;
 
-
+	public static String unitName = "Units";
 	public static Map<String, Integer> fTFuel = new HashMap<String, Integer>();
 	public static Map<String, Integer> iceBalls = new HashMap<String, Integer>();
 	
 	public static Block weaponCarver;
 	public static Block death;
+	public static Block projetor;
+	public static Block sicurityStorage;
 
 	public static Item pisol1;
 	public static Item mGun1;
@@ -81,6 +91,9 @@ public class Weapons
 	public static Item iceBallLauncher;
 	
 	public static Item info;
+	
+	public static Item spaceship;
+	public static Item speeder;
 
 	public static Item bullet1;
 	public static Item rocket1;
@@ -105,6 +118,7 @@ public class Weapons
 	public static int bulletid;
 	
 	public static int guiWeaponCraver = 0;
+	public static int guiSicurityStorage = 1;
 
 
 	@PreInit
@@ -141,8 +155,12 @@ public class Weapons
 		config.save();
 		weaponCarver = (new BlockWeaponCarver(startBlockID));
 		death = (new BlockDeath(startBlockID + 1));
+		projetor = (new BlockProjetor(startBlockID + 2));
+		sicurityStorage = (new BlockSicurityStorage(startBlockID + 3));
 		GameRegistry.registerBlock(weaponCarver, "WeaponCarver");
 		GameRegistry.registerBlock(death, "Death");
+		GameRegistry.registerBlock(projetor, "Projetor");
+		GameRegistry.registerBlock(sicurityStorage, "SicurityStorage");
 		proxy.serverInit();
 		proxy.registerKeyBindingHandler();
 	}
@@ -156,6 +174,7 @@ public class Weapons
 	{
 
         NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
+        MinecraftForge.EVENT_BUS.register(new EventShipControl("" , 0));
 		this.addAchievementLocalizations();
 
 
@@ -178,6 +197,9 @@ public class Weapons
 		jetPack = (new ItemJetPack(specialid + 41, 0, 1).setUnlocalizedName("9"));
 		jetBoots = (new ItemJetBoots(specialid + 43, 0, 3).setUnlocalizedName("10"));
 		infoHelmet = (new ItemInfoHelmet(specialid + 40, 0, 0).setUnlocalizedName("11"));
+		
+		spaceship = (new ItemSpaceShip(specialid + 1).setUnlocalizedName("12"));
+		speeder = (new ItemSpeeder(specialid + 2).setUnlocalizedName("13"));
 
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
@@ -190,6 +212,8 @@ public class Weapons
 		jetPack.setCreativeTab(weaponsTab);
 		jetBoots.setCreativeTab(weaponsTab);
 		infoHelmet.setCreativeTab(weaponsTab);
+		spaceship.setCreativeTab(weaponsTab);
+		speeder.setCreativeTab(weaponsTab);
 		
 		proxy.initTileEntities();
 		
@@ -212,6 +236,10 @@ public class Weapons
 		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.rocket.name", "rocket");
 		EntityRegistry.registerModEntity(EntityRocket.class, "iceball", this.getUniqueEntityId(), this, 80, 3, true);
 		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.iceball.name", "iceball");
+		EntityRegistry.registerModEntity(EntitySpaceShip.class, "spaceship", this.getUniqueEntityId(), this, 80, 3, true);
+		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.spaceship.name", "spaceship");
+		EntityRegistry.registerModEntity(EntitySpeeder.class, "speeder", this.getUniqueEntityId(), this, 80, 3, true);
+		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.speeder.name", "speeder");
 
 		proxy.load();
 		proxy.loadSound();
@@ -283,7 +311,8 @@ public class Weapons
 	public void blockNames()
 	{
 		LanguageRegistry.addName(weaponCarver,"Weapon Carver");
-		LanguageRegistry.addName(death,Color("DARK_RED") + "Death");
+		LanguageRegistry.addName(death,Color.DARK_RED + "Death");
+		LanguageRegistry.addName(projetor,"Block Projetor");
 	}
 
 	public void itemNames()
@@ -299,9 +328,8 @@ public class Weapons
 		LanguageRegistry.addName(jetPack,"JetPack");
 		LanguageRegistry.addName(jetBoots,"Jet Boots");
 		LanguageRegistry.addName(infoHelmet,"Information Helmet");
-	}
-	public EnumChatFormatting Color(String Color){
-		return EnumChatFormatting.valueOf(Color);
+		LanguageRegistry.addName(spaceship,Color.DARK_AQUA+ "\u00a7lSpace Ship");
+		LanguageRegistry.addName(speeder,Color.DARK_AQUA+ "\u00a7lSpeeder");
 	}
 
 	public void otherNames(){

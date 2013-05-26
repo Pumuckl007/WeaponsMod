@@ -1,22 +1,16 @@
 package weapons.tileentity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import weapons.Weapons;
+import weapons.crafting.WeaponCarverRecipiManager;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import weapons.crafting.WeaponCarver;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityWeaponCarver extends TileBase implements IInventory {
 
 	public ItemStack[] inventory;
+	private ItemStack[] oldInventory;
 
 	private final int INVENTORY_SIZE = 11;
 
@@ -32,15 +26,24 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	public static final int FUEL = 9;
 	public static final int OUTPUT = 10;
 
-	public int burnTime = 0;
-
-	public int currentFuel = 0;
+	private WeaponCarverRecipiManager recipies;
+	/** Server sync counter (once per 20 ticks) */
+	private int ticksSinceSync;
+	private int slotid;
+	private int itemid;
+	private int itemdamage;
+	private int power = 0;
+	private int powerDrainedCooldown;
+	private ItemStack creatingItem;
+	public boolean ison = false;
 
 	public int currentWrokTime = 0;
 
 	public TileEntityWeaponCarver() {
 
 		inventory = new ItemStack[INVENTORY_SIZE];
+		oldInventory = new ItemStack[INVENTORY_SIZE];
+		recipies = new WeaponCarverRecipiManager(inventory);
 	}
 
 	@Override
@@ -76,7 +79,43 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 
 		return itemStack;
 	}
+	/**
+	 * Called when a client event is received with the event number and
+	 * argument, see World.sendClientEvent
+	 */
+	@Override
+	public boolean receiveClientEvent(int eventID, int secondvalue) {
+		switch(eventID){
+			case(2):{
+				this.slotid = secondvalue;
+				return true;
+			}
+			case(3):{
+				this.itemid = secondvalue;
+				return true;
+			}
+			case(4):{
+				this.itemdamage = secondvalue;
+				return true;
+			}
+			case(5):{
+				ItemStack item = new ItemStack(this.itemid, secondvalue, this.itemdamage);
+				this.inventory[this.slotid] = item;
+				return true;
+			}
+			case(6):{
+				power = secondvalue;
+				return true;
+			}
+			case(7):{
+				this.inventory[secondvalue] = null;
+			}
+			default:{
+				return super.receiveClientEvent(eventID, secondvalue);
+			}
+		}
 
+	}
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 
@@ -110,18 +149,117 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 
 	@Override
 	public void openChest() {
-
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 6, power);
+		for(int i = 0; i < this.INVENTORY_SIZE - 1; i ++){
+			if(inventory[i]!= null){
+				if(oldInventory[i] == null){
+					int stack = i;
+					int id = inventory[stack].itemID;
+					int count = inventory[stack].stackSize;
+					int damage = inventory[stack].getItemDamage();
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+				}
+				else{
+					if(inventory[i].equals(oldInventory[i])){
+						int stack = i;
+						int id = inventory[stack].itemID;
+						int count = inventory[stack].stackSize;
+						int damage = inventory[stack].getItemDamage();
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+					}
+				}
+			}
+		}
+		oldInventory = inventory;
 	}
 
 	@Override
 	public void closeChest() {
-
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 6, power);
+		for(int i = 0; i < this.INVENTORY_SIZE - 1; i ++){
+			if(inventory[i]!= null){
+				if(oldInventory[i] == null){
+					int stack = i;
+					int id = inventory[stack].itemID;
+					int count = inventory[stack].stackSize;
+					int damage = inventory[stack].getItemDamage();
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+				}
+				else{
+					if(inventory[i].equals(oldInventory[i])){
+						int stack = i;
+						int id = inventory[stack].itemID;
+						int count = inventory[stack].stackSize;
+						int damage = inventory[stack].getItemDamage();
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+					}
+				}
+			}
+		}
+		oldInventory = inventory;
+	}
+	private int getFuel(){
+		int fuel;
+		if(inventory[FUEL] != null){
+			switch(inventory[FUEL].itemID){
+				case(351):{
+					if(inventory[FUEL].getItemDamage() == 4){
+						fuel = 5;
+						break;
+					}
+					else{
+						fuel = 0;
+						break;
+					}
+				}
+				case(331):{
+					fuel = 1;
+					break;
+				}
+				case(152):{
+					fuel = 9;
+					break;
+				}
+				case(22):{
+					fuel = 45;
+					break;
+				}
+				default:{
+					fuel = 0;
+					break;
+				}
+			}
+		}
+		else{
+			fuel = 0;
+		}
+		if((power + fuel) < 2000){
+			return fuel;
+		}
+		else{
+			return 0;
+		}
+	}
+	public boolean hasPower(){
+		return power > 0;
 	}
 	/**
 	 * Returns an integer between 0 and the passed value representing how close the current item is to being completely
 	 * crafted
 	 */
-	public int getCookProgressScaled(int par1)
+	public int getProgress(int par1)
 	{
 		return this.currentWrokTime * par1 / 20000;
 	}
@@ -130,9 +268,9 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
 		super.readFromNBT(nbtTagCompound);
-		this.burnTime = nbtTagCompound.getShort("BurnTime");
-		this.currentFuel = nbtTagCompound.getShort("Fule");
-		this.currentWrokTime = nbtTagCompound.getShort("WorkTime");
+		this.power = nbtTagCompound.getInteger("Power");
+		this.currentWrokTime = nbtTagCompound.getInteger("WorkTime");
+		this.ison = nbtTagCompound.getBoolean("IsWorking");
 		// Read in the ItemStacks in the inventory from NBT
 		NBTTagList tagList = nbtTagCompound.getTagList("Items");
 		inventory = new ItemStack[this.getSizeInventory()];
@@ -149,9 +287,9 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setShort("BurnTime", (short)this.burnTime);
-		nbtTagCompound.setShort("Fule", (short)this.currentFuel);
-		nbtTagCompound.setShort("WorkTime", (short)this.currentWrokTime);
+		nbtTagCompound.setInteger("Power", this.power);
+		nbtTagCompound.setInteger("WorkTime", this.currentWrokTime);
+		nbtTagCompound.setBoolean("IsWorking", ison);
 		// Write the ItemStacks in the inventory to NBT
 		NBTTagList tagList = new NBTTagList();
 		for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
@@ -176,18 +314,9 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 
 		return true;
 	}
-	/**
-	 * Returns an integer between 0 and the passed value representing how much burn time is left on the current fuel
-	 * item, where 0 means that the item is exhausted and the passed value means that the item is fresh
-	 */
-	public int getBurnTimeRemainingScaled(int par1)
+	public int getPower()
 	{
-		if (this.burnTime == 0)
-		{
-			this.burnTime = 20;
-		}
-
-		return this.currentWrokTime * par1 / this.burnTime;
+		return this.power;
 	}
 
 	public boolean isWorking()
@@ -195,157 +324,103 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 		return this.currentWrokTime > 0;
 	}
 	/**
-	 * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-	 * ticks and creates a new spawn inside its implementation.
+	 * Allows the entity to update its state. Overridden in most subclasses,
+	 * e.g. the mob spawner uses this to count ticks and creates a new spawn
+	 * inside its implementation.
 	 */
-	public void updateEntity()
-	{
-		boolean flag = this.burnTime > 0;
-		boolean flag1 = false;
-
-		if (this.burnTime > 0)
-		{
-			--this.burnTime;
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		int addingfuel = getFuel();
+		if(addingfuel > 0){
+			if(inventory[FUEL].stackSize >= 1){
+				this.power += addingfuel;
+				inventory[FUEL].stackSize --;
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 6, power);
+				int stack = FUEL;
+				int id = inventory[stack].itemID;
+				int count = inventory[stack].stackSize;
+				int damage = inventory[stack].getItemDamage();
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+			}
+			else{
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 7, FUEL);
+			}
 		}
-
-		if (!this.worldObj.isRemote)
-		{
-			if (this.burnTime == 0 && this.canSmelt())
-			{
-				this.currentWrokTime = this.burnTime = getItemBurnTime(this.inventory[1]);
-
-				if (this.burnTime > 0)
-				{
-					flag1 = true;
-					int i = 0;
-					while(i < 9){
-
-						if (this.inventory[i] != null)
-						{
-							--this.inventory[i].stackSize;
-
-							if (this.inventory[i].stackSize == 0)
-							{
-								this.inventory[i] = this.inventory[i].getItem().getContainerItemStack(inventory[i]);
-							}
-						}
-						i ++;
+		
+		if(this.hasPower() && !this.ison){
+			recipies.updateInventorySimp(inventory);
+			if(recipies.doStacksCreateRecipy()){
+				this.ison = true;
+				this.creatingItem = recipies.output();
+			}
+		}
+		if(this.creatingItem != null){
+			recipies.updateInventorySimp(inventory);
+			if(this.currentWrokTime > 99){
+				if(recipies.doStacksCreateRecipy()){
+					if(recipies.output() == this.creatingItem){
+						
 					}
 				}
-
 			}
-
-			if (this.isWorking() && this.canSmelt())
-			{
-				++this.currentWrokTime;
-
-				if (this.currentWrokTime == 2000)
-				{
-					this.currentWrokTime = 0;
-					this.smeltItem();
-					flag1 = true;
+		}
+		
+		if(powerDrainedCooldown > 40960){
+			powerDrainedCooldown = 0;
+			if(power > 0){
+				power --;
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 6, power);
+			}
+			else{
+				ison = false;
+			}
+		}
+		else{
+			if(this.ison){
+				powerDrainedCooldown += 2048;
+			}
+		}
+		if (++ticksSinceSync % 20 == 0) {
+			if(oldInventory == null){
+				oldInventory = inventory;
+				return;
+			}
+			if(!this.worldObj.isRemote){
+				for(int i = 0; i < this.INVENTORY_SIZE - 1; i ++){
+					if(inventory[i]!= null){
+						if(oldInventory[i] == null){
+							int stack = i;
+							int id = inventory[stack].itemID;
+							int count = inventory[stack].stackSize;
+							int damage = inventory[stack].getItemDamage();
+							worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+							worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+							worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+							worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+						}
+						else{
+							if(inventory[i] != oldInventory[i]){
+								int stack = i;
+								int id = inventory[stack].itemID;
+								int count = inventory[stack].stackSize;
+								int damage = inventory[stack].getItemDamage();
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, stack);
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+							}
+						}
+					}
 				}
-			}
-			else
-			{
-				this.currentWrokTime = 0;
-			}
-
-			if (flag != this.burnTime > 0)
-			{
-				flag1 = true;
+				oldInventory = inventory;
 			}
 		}
-
-		if (flag1)
-		{
-			this.onInventoryChanged();
-		}
-	}
-
-	public void smeltItem()
-	{
-		if (this.canSmelt())
-		{
-			WeaponCarver weaponCarver = WeaponCarver.getInstance();
-			ItemStack itemstack = weaponCarver.findMatchingRecipe(this, worldObj);
-
-			if (this.inventory[10] == null)
-			{
-				this.inventory[10] = itemstack.copy();
-			}
-			else if (this.inventory[10].isItemEqual(itemstack))
-			{
-				inventory[10].stackSize += itemstack.stackSize;
-			}
-
-			int i = 0;
-			while(i < 9){
-				if(this.inventory[i] != null){
-					--this.inventory[i].stackSize;
-				}
-				i ++;
-			}
-
-			if (this.inventory[0].stackSize <= 0)
-			{
-				this.inventory[0] = null;
-			}
-		}
-	}
-
-	public static int getItemBurnTime(ItemStack par0ItemStack)
-	{
-		if (par0ItemStack == null)
-		{
-			return 0;
-		}
-		else
-		{
-			int i = par0ItemStack.getItem().itemID;
-			Item item = par0ItemStack.getItem();
-
-			if (par0ItemStack.getItem() instanceof ItemBlock && Block.blocksList[i] != null)
-			{
-				Block block = Block.blocksList[i];
-
-				if (block == Block.woodSingleSlab)
-				{
-					return 150;
-				}
-
-				if (block.blockMaterial == Material.wood)
-				{
-					return 300;
-				}
-			}
-
-			if (item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD")) return 200;
-			if (item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD")) return 200;
-			if (item instanceof ItemHoe && ((ItemHoe) item).getMaterialName().equals("WOOD")) return 200;
-			if (i == Item.stick.itemID) return 100;
-			if (i == Item.coal.itemID) return 1600;
-			if (i == Item.bucketLava.itemID) return 20000;
-			if (i == Block.sapling.blockID) return 100;
-			if (i == Item.blazeRod.itemID) return 2400;
-			return GameRegistry.getFuelValue(par0ItemStack);
-		}
-	}
-	private boolean canSmelt()
-	{
-		if (this.inventory[0] == null && this.inventory[1] == null && this.inventory[2] == null && this.inventory[3] == null && this.inventory[4] == null && this.inventory[5] == null && this.inventory[6] == null && this.inventory[7] == null && this.inventory[8] == null)
-		{
-			return false;
-		}
-		else
-		{
-			WeaponCarver weaponCarver = WeaponCarver.getInstance();
-			ItemStack itemstack = weaponCarver.findMatchingRecipe(this, worldObj);
-			if (itemstack == null) return false;
-			if (this.inventory[9] == null) return true;
-			if (!this.inventory[9].isItemEqual(itemstack)) return false;
-			int result = inventory[9].stackSize + itemstack.stackSize;
-			return (result <= getInventoryStackLimit() && result <= itemstack.getMaxStackSize());
+		else{
+			ticksSinceSync ++;
 		}
 	}
 	public ItemStack getStackInRowAndColumn(int par1, int par2)

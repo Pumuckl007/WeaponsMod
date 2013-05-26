@@ -1,6 +1,5 @@
 package weapons.client.renderitems;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -51,21 +50,15 @@ public class ItemJetBootsRender extends Render implements IItemRenderer {
 				return;
 			}
 			case EQUIPPED: {
-		        boolean gameIsFirstPerson = (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0);
-				if(gameIsFirstPerson){
-					renderBoots(3F, 0.5F, 1.25F, 0F, 180F, -27.5F, 0.50F);
-				}
-				else{
-					renderBoots(1F, 0.0F, 1.25F, 0F, 90F, 0F, 0.40F);
-				}
+				renderBoots(1F, 0.0F, 1.25F, 0F, 90F, 0F, 0.40F);
 				return;
 			}
 			case INVENTORY: {
 				renderBoots(1.0F, 0F, 0.0F, 0, 10F, 0F, 0.50F);
 				return;
 			}
-			case FIRST_PERSON_MAP:{
-				renderBoots(1F, 0.0F, 1.25F, 0F, 90F, 0F, 0.40F);
+			case EQUIPPED_FIRST_PERSON:{
+				renderBoots(3F, 0.5F, 1.25F, 0F, 180F, -27.5F, 0.50F);
 				return;
 			}
 			default:

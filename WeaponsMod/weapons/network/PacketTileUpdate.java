@@ -62,7 +62,6 @@ public class PacketTileUpdate extends PacketBase {
 
     @Override
     public void execute(INetworkManager manager, Player player) {
-
         Weapons.proxy.handleTileEntityPacket(x, y, z, ForgeDirection.getOrientation(orientation), state, owner, customName);
     }
 
