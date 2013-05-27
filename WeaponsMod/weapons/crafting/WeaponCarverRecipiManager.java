@@ -1,17 +1,18 @@
 package weapons.crafting;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import weapons.Weapons;
-
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import weapons.Weapons;
 
 
 public class WeaponCarverRecipiManager {
 
-	private Map<Integer[], ItemStack> recipies = new HashMap<Integer[], ItemStack>();
+//	private Map<Integer[], ItemStack> recipies = new HashMap<Integer[], ItemStack>();
+	private Map<List<Integer>, ItemStack> recipies = new HashMap<List<Integer>, ItemStack>();
 	ItemStack[] inventory;
 	Integer[] needed;
 	ItemStack output;
@@ -44,7 +45,7 @@ public class WeaponCarverRecipiManager {
 	
 	private void initRecipies(){
 		addRecipe(1,1,1,1,1,1,1,1,1, new ItemStack(Weapons.pisol1));
-		addRecipe(0,0,0,7,0,7,7,7,7, new ItemStack(Weapons.flameThrower));
+//		addRecipe(0,0,0,7,0,7,7,7,7, new ItemStack(Weapons.flameThrower));
 	}
 	
 	public void addRecipe(int slot1, int slot2, int slot3, int slot4, int slot5, int slot6, int slot7, int slot8, int slot9, ItemStack item){
@@ -57,7 +58,8 @@ public class WeaponCarverRecipiManager {
 		needed[6] = slot7;
 		needed[7] = slot8;
 		needed[8] = slot9;
-		recipies.put(needed, item);
+		List<Integer> slots = Arrays.asList(needed);
+		recipies.put(slots, item);
 	}
 	
 	public ItemStack output(){
@@ -70,20 +72,23 @@ public class WeaponCarverRecipiManager {
 				ids[i] = 0;
 			}
 		}
-		return recipies.get(ids);
+		List<Integer> slots = Arrays.asList(ids);
+		return recipies.get(slots);
 	}
 	
 	public boolean doStacksCreateRecipy(){
 		Integer[] ids = new Integer[9];
 		for(int i = 0; i < 9; i++){
 			if(inventory[i] != null){
-			ids[i] = inventory[i].itemID;
+				ids[i] = inventory[i].itemID;
 			}
 			else{
 				ids[i] = 0;
 			}
 		}
-		return recipies.containsKey(ids);
+		List<Integer> slots = Arrays.asList(ids);
+		System.out.println(recipies);
+		return recipies.containsKey(slots);
 	}
 	
 	public void updateInventory(ItemStack[] inventory, Integer[] slots){

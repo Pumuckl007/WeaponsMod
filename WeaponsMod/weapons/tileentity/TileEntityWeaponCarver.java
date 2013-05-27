@@ -34,7 +34,7 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	private int itemdamage;
 	private int power = 0;
 	private int powerDrainedCooldown;
-	private ItemStack creatingItem;
+	private ItemStack product;
 	public boolean ison = false;
 
 	public int currentWrokTime = 0;
@@ -109,6 +109,20 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 			}
 			case(7):{
 				this.inventory[secondvalue] = null;
+				return true;
+			}
+			case(8):{
+				this.currentWrokTime = secondvalue;
+				return true;
+			}
+			case(9):{
+				if(secondvalue == 1){
+					this.ison = true;
+				}
+				else{
+					this.ison = false;
+				}
+				return true;
 			}
 			default:{
 				return super.receiveClientEvent(eventID, secondvalue);
@@ -268,9 +282,9 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
 		super.readFromNBT(nbtTagCompound);
-		this.power = nbtTagCompound.getInteger("Power");
-		this.currentWrokTime = nbtTagCompound.getInteger("WorkTime");
-		this.ison = nbtTagCompound.getBoolean("IsWorking");
+		power = nbtTagCompound.getInteger("Power");
+		currentWrokTime = nbtTagCompound.getInteger("WorkTime");
+		ison = nbtTagCompound.getBoolean("IsWorking");
 		// Read in the ItemStacks in the inventory from NBT
 		NBTTagList tagList = nbtTagCompound.getTagList("Items");
 		inventory = new ItemStack[this.getSizeInventory()];
@@ -287,8 +301,8 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setInteger("Power", this.power);
-		nbtTagCompound.setInteger("WorkTime", this.currentWrokTime);
+		nbtTagCompound.setInteger("Power", power);
+		nbtTagCompound.setInteger("WorkTime", currentWrokTime);
 		nbtTagCompound.setBoolean("IsWorking", ison);
 		// Write the ItemStacks in the inventory to NBT
 		NBTTagList tagList = new NBTTagList();
@@ -350,25 +364,78 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 				worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 7, FUEL);
 			}
 		}
-		
+
 		if(this.hasPower() && !this.ison){
 			recipies.updateInventorySimp(inventory);
 			if(recipies.doStacksCreateRecipy()){
 				this.ison = true;
-				this.creatingItem = recipies.output();
+				this.product = recipies.output();
 			}
 		}
-		if(this.creatingItem != null){
+		if(this.product != null && inventory[OUTPUT] == null){
 			recipies.updateInventorySimp(inventory);
 			if(this.currentWrokTime > 99){
 				if(recipies.doStacksCreateRecipy()){
-					if(recipies.output() == this.creatingItem){
-						
+					if(recipies.output() == this.product){
+						for(int i = 0; i < 9; i++){
+							if(inventory[i].stackSize > 1){
+								inventory[i].stackSize --;
+								int id = inventory[i].itemID;
+								int count = inventory[i].stackSize;
+								int damage = inventory[i].getItemDamage();
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 2, i);
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 3, id);
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 4, damage);
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 5, count);
+							}
+							else{
+								inventory[i] = null;
+								worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 7, i);
+							}
+						}
+						inventory[OUTPUT] = this.product;
+						this.product = null;
+						this.ison = false;
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 9, 0);
 					}
+					else{
+						this.currentWrokTime = 0;
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 8, 0);
+						this.product = recipies.output();
+					}
+				}
+				else{
+					this.currentWrokTime = 0;
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 8, 0);
+					this.ison = false;
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 9, 0);
+				}
+			}
+			else{
+				if(recipies.doStacksCreateRecipy()){
+					if(recipies.output() == this.product){
+						this.currentWrokTime ++;
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 8, this.currentWrokTime);
+					}
+					else{
+						this.currentWrokTime = 0;
+						worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 8, 0);
+						this.product = recipies.output();
+					}
+				}
+				else{
+					this.currentWrokTime = 0;
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 8, 0);
+					this.ison = false;
+					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 9, 0);
 				}
 			}
 		}
-		
+		else if(this.product != null){
+			this.currentWrokTime = 0;
+			worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 8, 0);
+		}
+
 		if(powerDrainedCooldown > 40960){
 			powerDrainedCooldown = 0;
 			if(power > 0){
@@ -424,15 +491,15 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 		}
 	}
 	public ItemStack getStackInRowAndColumn(int par1, int par2)
-    {
-        if (par1 >= 0 && par1 < 3)
-        {
-            int k = par1 + par2 * 3;
-            return this.getStackInSlot(k);
-        }
-        else
-        {
-            return null;
-        }
-    }
+	{
+		if (par1 >= 0 && par1 < 3)
+		{
+			int k = par1 + par2 * 3;
+			return this.getStackInSlot(k);
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

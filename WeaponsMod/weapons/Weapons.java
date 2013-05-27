@@ -55,7 +55,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @Mod(modid = "weapons",
 name = "Weapons Mod",
 version = "@VERSION@ (build @BUILD_NUMBER@)",
-dependencies = "required-after:Forge@[7.8.0.686,)",
+dependencies = "required-after:Forge@[7.8.0.703,)",
 certificateFingerprint = "@FINGERPRINT@")
 @NetworkMod(
         channels = { "weapons" },
