@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class TileEntityWeaponCarver extends TileBase implements IInventory {
+public class TileEntityWeaponCarver extends TileEntityPowerBase implements IInventory {
 
 	public ItemStack[] inventory;
 	private ItemStack[] oldInventory;
@@ -32,7 +32,6 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 	private int slotid;
 	private int itemid;
 	private int itemdamage;
-	private int power = 0;
 	private int powerDrainedCooldown;
 	private ItemStack product;
 	public boolean ison = false;
@@ -41,6 +40,7 @@ public class TileEntityWeaponCarver extends TileBase implements IInventory {
 
 	public TileEntityWeaponCarver() {
 
+		super(true);
 		inventory = new ItemStack[INVENTORY_SIZE];
 		oldInventory = new ItemStack[INVENTORY_SIZE];
 		recipies = new WeaponCarverRecipiManager(inventory);

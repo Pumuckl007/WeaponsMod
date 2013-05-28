@@ -48,6 +48,9 @@ public class BlockItemWeaponCarverRender implements IItemRenderer {
                 renderModel(-1, -1.2F, -0.8F, 0.85F);
                 return;
             }
+            case EQUIPPED_FIRST_PERSON:{
+            	renderModel(0.5F, 0.0F, 1.25F, 0.66F);
+            }
             default:
                 return;
         }

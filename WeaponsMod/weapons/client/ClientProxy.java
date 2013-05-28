@@ -11,9 +11,12 @@ import weapons.bullets.EnityIceBall;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.client.renderblocks.BlockItemDeathRender;
+import weapons.client.renderblocks.BlockItemPowerStorageRender;
 import weapons.client.renderblocks.BlockItemProjetorRender;
+import weapons.client.renderblocks.BlockItemSSRender;
 import weapons.client.renderblocks.BlockItemWeaponCarverRender;
 import weapons.client.renderblocks.TileEntityRenderDeath;
+import weapons.client.renderblocks.TileEntityRenderPowerStorage;
 import weapons.client.renderblocks.TileEntityRenderProjetor;
 import weapons.client.renderblocks.TileEntityRenderSS;
 import weapons.client.renderblocks.TileEntityRenderWeaponCarver;
@@ -42,6 +45,7 @@ import weapons.network.PacketTypeHandler;
 import weapons.server.ServerTick;
 import weapons.tileentity.TileBase;
 import weapons.tileentity.TileEntityDeath;
+import weapons.tileentity.TileEntityPowerStorage;
 import weapons.tileentity.TileEntityProjetor;
 import weapons.tileentity.TileEntitySicurityStorage;
 import weapons.tileentity.TileEntityWeaponCarver;
@@ -79,6 +83,8 @@ public class ClientProxy extends weapons.CommonProxy
 		MinecraftForgeClient.registerItemRenderer(Weapons.startBlockID, new BlockItemWeaponCarverRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.startBlockID + 1, new BlockItemDeathRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.startBlockID + 2, new BlockItemProjetorRender());
+		MinecraftForgeClient.registerItemRenderer(Weapons.startBlockID + 3, new BlockItemSSRender());
+		MinecraftForgeClient.registerItemRenderer(Weapons.startBlockID + 4, new BlockItemPowerStorageRender());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet(0.1F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityRocket.class, new RenderRocket(0.1F));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpaceShip.class, new RenderSpaceShip());
@@ -102,6 +108,7 @@ public class ClientProxy extends weapons.CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDeath.class, new TileEntityRenderDeath());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjetor.class, new TileEntityRenderProjetor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySicurityStorage.class, new TileEntityRenderSS());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerStorage.class, new TileEntityRenderPowerStorage());
 	}
 
 	@Override

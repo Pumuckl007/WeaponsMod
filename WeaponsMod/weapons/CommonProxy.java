@@ -4,12 +4,16 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import weapons.client.gui.GuiPowerStorage;
 import weapons.client.gui.GuiSicurityStorage;
 import weapons.client.gui.GuiWeaponCarver;
+import weapons.inventory.ContainerPowerStorage;
 import weapons.inventory.ContainerSicurityStorage;
 import weapons.inventory.ContainerWeaponCarver;
 import weapons.server.ServerTick;
 import weapons.tileentity.TileEntityDeath;
+import weapons.tileentity.TileEntityPowerBase;
+import weapons.tileentity.TileEntityPowerStorage;
 import weapons.tileentity.TileEntityProjetor;
 import weapons.tileentity.TileEntitySicurityStorage;
 import weapons.tileentity.TileEntityWeaponCarver;
@@ -61,6 +65,10 @@ public class CommonProxy implements IGuiHandler
         	TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
             return new ContainerSicurityStorage(player.inventory, tile);
         }
+        if (ID == Weapons.guiPowerStorage){
+        	TileEntityPowerStorage tile = (TileEntityPowerStorage) world.getBlockTileEntity(x, y, z);
+            return new ContainerPowerStorage(player.inventory, tile);
+        }
 		return null;
 	}
 	@Override
@@ -74,7 +82,10 @@ public class CommonProxy implements IGuiHandler
         	TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
             return new GuiSicurityStorage(player.inventory, tile);
         }
-
+        if (ID == Weapons.guiPowerStorage){
+        	TileEntityPowerStorage tile = (TileEntityPowerStorage) world.getBlockTileEntity(x, y, z);
+            return new GuiPowerStorage(player.inventory, tile);
+        }
         return null;
     }
 	
@@ -84,6 +95,8 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityDeath.class, "death");
 		GameRegistry.registerTileEntity(TileEntityProjetor.class, "projetor");
 		GameRegistry.registerTileEntity(TileEntitySicurityStorage.class, "sicurityStorage");
+		GameRegistry.registerTileEntity(TileEntityPowerBase.class, "powerBase");
+		GameRegistry.registerTileEntity(TileEntityPowerStorage.class, "powerStorage");
 	}
 
 	public void sayClient(String message){

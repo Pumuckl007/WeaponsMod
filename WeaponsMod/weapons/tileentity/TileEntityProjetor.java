@@ -23,7 +23,6 @@ public class TileEntityProjetor extends TileBase {
 	 */
 	@Override
 	public boolean receiveClientEvent(int eventID, int secondvalue) {
-		System.out.println("recived: " + eventID + " , " + secondvalue);
 		switch(eventID){
 			case(1):{
 				if(secondvalue == 1){
@@ -67,11 +66,9 @@ public class TileEntityProjetor extends TileBase {
 		if (++sendcooldown % 20 == 0) {
 			if(!this.worldObj.isRemote){
 				if(active){
-					System.out.println("sending: " + 1 + " , " + 1);
 					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 1, 1);
 				}
 				else{
-					System.out.println("sending: " + 1 + " , " + 0);
 					worldObj.addBlockEvent(xCoord, yCoord, zCoord, Weapons.sicurityStorage.blockID, 1, 0);
 				}
 				

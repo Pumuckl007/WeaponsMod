@@ -3,10 +3,13 @@ package weapons.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import weapons.Weapons;
+import weapons.client.gui.GuiPowerStorage;
 import weapons.client.gui.GuiSicurityStorage;
 import weapons.client.gui.GuiWeaponCarver;
+import weapons.inventory.ContainerPowerStorage;
 import weapons.inventory.ContainerSicurityStorage;
 import weapons.inventory.ContainerWeaponCarver;
+import weapons.tileentity.TileEntityPowerStorage;
 import weapons.tileentity.TileEntitySicurityStorage;
 import weapons.tileentity.TileEntityWeaponCarver;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -27,6 +30,10 @@ public class GuiHandler implements IGuiHandler {
         	TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
             return new ContainerSicurityStorage(player.inventory, tile);
         }
+        if (ID == Weapons.guiPowerStorage){
+        	TileEntityPowerStorage tile = (TileEntityPowerStorage) world.getBlockTileEntity(x, y, z);
+            return new ContainerPowerStorage(player.inventory, tile);
+        }
 		return null;
 	}
 	@Override
@@ -40,7 +47,10 @@ public class GuiHandler implements IGuiHandler {
         	TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
             return new GuiSicurityStorage(player.inventory, tile);
         }
-
+        if (ID == Weapons.guiPowerStorage){
+        	TileEntityPowerStorage tile = (TileEntityPowerStorage) world.getBlockTileEntity(x, y, z);
+            return new GuiPowerStorage(player.inventory, tile);
+        }
         return null;
     }
 }

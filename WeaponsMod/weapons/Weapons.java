@@ -18,6 +18,7 @@ import weapons.armor.ItemInfoHelmet;
 import weapons.armor.ItemJetBoots;
 import weapons.armor.ItemJetPack;
 import weapons.blocks.BlockDeath;
+import weapons.blocks.BlockPowerStorage;
 import weapons.blocks.BlockProjetor;
 import weapons.blocks.BlockSicurityStorage;
 import weapons.blocks.BlockWeaponCarver;
@@ -83,6 +84,7 @@ public class Weapons
 	public static Block death;
 	public static Block projetor;
 	public static Block sicurityStorage;
+	public static Block powerStorage;
 
 	public static Item pisol1;
 	public static Item mGun1;
@@ -119,6 +121,7 @@ public class Weapons
 	
 	public static int guiWeaponCraver = 0;
 	public static int guiSicurityStorage = 1;
+	public static int guiPowerStorage = 2;
 
 
 	@PreInit
@@ -157,10 +160,12 @@ public class Weapons
 		death = (new BlockDeath(startBlockID + 1));
 		projetor = (new BlockProjetor(startBlockID + 2));
 		sicurityStorage = (new BlockSicurityStorage(startBlockID + 3));
+		powerStorage = (new BlockPowerStorage(startBlockID + 4));
 		GameRegistry.registerBlock(weaponCarver, "WeaponCarver");
 		GameRegistry.registerBlock(death, "Death");
 		GameRegistry.registerBlock(projetor, "Projetor");
 		GameRegistry.registerBlock(sicurityStorage, "SicurityStorage");
+		GameRegistry.registerBlock(powerStorage, "PowerStorage");
 		proxy.serverInit();
 		proxy.registerKeyBindingHandler();
 	}
@@ -313,6 +318,7 @@ public class Weapons
 		LanguageRegistry.addName(weaponCarver,"Weapon Carver");
 		LanguageRegistry.addName(death,Color.DARK_RED + "Death");
 		LanguageRegistry.addName(projetor,"Block Projetor");
+		LanguageRegistry.addName(powerStorage,"PowerStorage");
 	}
 
 	public void itemNames()

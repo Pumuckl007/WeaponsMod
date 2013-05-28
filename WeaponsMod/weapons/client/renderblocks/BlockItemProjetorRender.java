@@ -45,8 +45,11 @@ public class BlockItemProjetorRender implements IItemRenderer {
                 return;
             }
             case INVENTORY: {
-                renderModel(-1, -1.7F, -0.8F, 0.85F);
+                renderModel(-0.9F, -1.4F, -0.8F, 0.85F);
                 return;
+            }
+            case EQUIPPED_FIRST_PERSON:{
+            	renderModel(0.5F, 0.0F, 1.25F, 0.66F);
             }
             default:
                 return;

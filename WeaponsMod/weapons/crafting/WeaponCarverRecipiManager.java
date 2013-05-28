@@ -87,7 +87,6 @@ public class WeaponCarverRecipiManager {
 			}
 		}
 		List<Integer> slots = Arrays.asList(ids);
-		System.out.println(recipies);
 		return recipies.containsKey(slots);
 	}
 	
