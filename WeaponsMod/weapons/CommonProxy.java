@@ -11,11 +11,13 @@ import weapons.inventory.ContainerPowerStorage;
 import weapons.inventory.ContainerSicurityStorage;
 import weapons.inventory.ContainerWeaponCarver;
 import weapons.server.ServerTick;
+import weapons.tileentity.TileEntityAntiMaterGenerator;
 import weapons.tileentity.TileEntityDeath;
 import weapons.tileentity.TileEntityPowerBase;
 import weapons.tileentity.TileEntityPowerStorage;
 import weapons.tileentity.TileEntityProjetor;
 import weapons.tileentity.TileEntitySicurityStorage;
+import weapons.tileentity.TileEntityUpgator;
 import weapons.tileentity.TileEntityWeaponCarver;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -97,6 +99,8 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntitySicurityStorage.class, "sicurityStorage");
 		GameRegistry.registerTileEntity(TileEntityPowerBase.class, "powerBase");
 		GameRegistry.registerTileEntity(TileEntityPowerStorage.class, "powerStorage");
+		GameRegistry.registerTileEntity(TileEntityAntiMaterGenerator.class, "amg");
+		GameRegistry.registerTileEntity(TileEntityUpgator.class, "upgrator");
 	}
 
 	public void sayClient(String message){

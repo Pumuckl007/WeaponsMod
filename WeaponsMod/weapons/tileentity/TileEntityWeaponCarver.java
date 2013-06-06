@@ -104,7 +104,7 @@ public class TileEntityWeaponCarver extends TileEntityPowerBase implements IInve
 				return true;
 			}
 			case(6):{
-				power = secondvalue;
+				power = (short)secondvalue;
 				return true;
 			}
 			case(7):{
@@ -282,7 +282,7 @@ public class TileEntityWeaponCarver extends TileEntityPowerBase implements IInve
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
 		super.readFromNBT(nbtTagCompound);
-		power = nbtTagCompound.getInteger("Power");
+		power = nbtTagCompound.getShort("Power");
 		currentWrokTime = nbtTagCompound.getInteger("WorkTime");
 		ison = nbtTagCompound.getBoolean("IsWorking");
 		// Read in the ItemStacks in the inventory from NBT

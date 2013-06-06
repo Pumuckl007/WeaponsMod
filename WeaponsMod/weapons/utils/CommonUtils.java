@@ -69,4 +69,12 @@ public class CommonUtils {
 		string = twoDForm.format(a);
 		return string;
 	}
+	public static int booleanToInt(boolean bool){
+		if(bool){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
 }

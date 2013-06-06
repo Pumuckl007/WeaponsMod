@@ -21,6 +21,7 @@ import weapons.client.renderblocks.TileEntityRenderProjetor;
 import weapons.client.renderblocks.TileEntityRenderSS;
 import weapons.client.renderblocks.TileEntityRenderWeaponCarver;
 import weapons.client.rendering.entity.RenderBullet;
+import weapons.client.rendering.entity.RenderFlare;
 import weapons.client.rendering.entity.RenderIceBall;
 import weapons.client.rendering.entity.RenderRocket;
 import weapons.client.rendering.entity.RenderSpaceShip;
@@ -38,6 +39,8 @@ import weapons.client.renderitems.ItemRocktlauncherRender;
 import weapons.client.renderitems.ItemScarHRender;
 import weapons.client.renderitems.ItemSpaceShipRender;
 import weapons.client.renderitems.ItemSpeederRender;
+import weapons.client.renderitems.ItemTBTRender;
+import weapons.entity.EntityFlare;
 import weapons.entity.EntitySpaceShip;
 import weapons.entity.EntitySpeeder;
 import weapons.network.PacketRequestEvent;
@@ -77,6 +80,7 @@ public class ClientProxy extends weapons.CommonProxy
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 512, new ItemInfoRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 513, new ItemSpaceShipRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 514, new ItemSpeederRender());
+		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 515, new ItemTBTRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 552, new ItemInfoHelmetRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 553, new ItemJetPackRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 555, new ItemJetBootsRender());
@@ -90,6 +94,7 @@ public class ClientProxy extends weapons.CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpaceShip.class, new RenderSpaceShip());
 		RenderingRegistry.registerEntityRenderingHandler(EnityIceBall.class, new RenderIceBall());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpeeder.class, new RenderSpeeder());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderFlare());
 
 	}
 	@Override

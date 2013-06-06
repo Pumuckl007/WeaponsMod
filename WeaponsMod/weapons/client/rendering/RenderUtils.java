@@ -2,8 +2,10 @@ package weapons.client.rendering;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,8 @@ import weapons.lib.Textures;
 public class RenderUtils {
 
     private static int rotationAngle = 0;
+    private static float lightmapLastX;
+    private static float lightmapLastY;
 
     public static void renderRotatingBlockIntoGUI(FontRenderer fontRenderer, RenderEngine renderEngine, ItemStack stack, int x, int y, float zLevel, float scale) {
 
@@ -75,6 +79,35 @@ public class RenderUtils {
         tessellator.addVertexWithUV(x + 0, y + 0, zLevel, icon.getMinU(), icon.getMinV());
         tessellator.draw();
     }
+    public static void drawGradientRect(float par1, int par2, float par3, int par4, int par5, int par6)
+    {
+        float f = (float)(par5 >> 24 & 255) / 255.0F;
+        float f1 = (float)(par5 >> 16 & 255) / 255.0F;
+        float f2 = (float)(par5 >> 8 & 255) / 255.0F;
+        float f3 = (float)(par5 & 255) / 255.0F;
+        float f4 = (float)(par6 >> 24 & 255) / 255.0F;
+        float f5 = (float)(par6 >> 16 & 255) / 255.0F;
+        float f6 = (float)(par6 >> 8 & 255) / 255.0F;
+        float f7 = (float)(par6 & 255) / 255.0F;
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.setColorRGBA_F(f1, f2, f3, f);
+        tessellator.addVertex((double)par3, (double)par2, (double)100);
+        tessellator.addVertex((double)par1, (double)par2, (double)100);
+        tessellator.setColorRGBA_F(f5, f6, f7, f4);
+        tessellator.addVertex((double)par1, (double)par4, (double)100);
+        tessellator.addVertex((double)par3, (double)par4, (double)100);
+        tessellator.draw();
+        GL11.glShadeModel(GL11.GL_FLAT);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+    }
     public static void renderBeam(double x, double y, double z, double desierdx, double desierdy, double desierdz, double red, double green, double blue, double alpha, float radius){
 		GL11.glPushMatrix();
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture("/mods/weapons/textures/models/dynamiclyColor.png");
@@ -121,4 +154,16 @@ public class RenderUtils {
 		s.draw(radius, 32, 16);
 		GL11.glPopMatrix();
 	}
+    public static void glowOn() {
+        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+        lightmapLastX = OpenGlHelper.lastBrightnessX;
+        lightmapLastY = OpenGlHelper.lastBrightnessY;
+        RenderHelper.disableStandardItemLighting();
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+    }
+
+    public static void glowOff() {
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightmapLastX, lightmapLastY);
+        GL11.glPopAttrib();
+    }
 }

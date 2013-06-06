@@ -1,5 +1,7 @@
 package weapons.tileentity;
 
+import java.util.Random;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +27,7 @@ public class TileEntitySicurityStorage extends TileBase implements IInventory {
 	private int itemdamage;
 	private int power = 0;
 	private int powerDrainedCooldown;
+	protected Random rand;
 	public boolean ison = true;
 
 	public static final int INVENTORY_SIZE = 8 * 4;
@@ -40,6 +43,7 @@ public class TileEntitySicurityStorage extends TileBase implements IInventory {
 		super();
 		inventory = new ItemStack[34];
 		oldInventory = new ItemStack[34];
+		rand = new Random();
 	}
 
 	@Override
@@ -342,6 +346,7 @@ public class TileEntitySicurityStorage extends TileBase implements IInventory {
 		else{
 			ticksSinceSync ++;
 		}
+		ticksSinceSync ++;
 	}
 
 	@Override

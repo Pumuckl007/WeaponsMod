@@ -8,7 +8,7 @@ import weapons.power.PowerTransfer;
 public class TileEntityPowerBase extends TileBase {
 
 
-	protected int power = 0;
+	protected short power = 0;
 	protected int MAXPOWER = 10000;
 	private boolean sucksPower;
 
@@ -42,6 +42,16 @@ public class TileEntityPowerBase extends TileBase {
 		}
 		return false;
 	}
+	public boolean addPower(int power, boolean update){
+		if((this.power + power) <=MAXPOWER){
+			this.power += power;
+			if(update){
+				this.worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, 6, power);
+			}
+			return true;
+		}
+		return false;
+	}
 
 	public boolean subtractPower(int power){
 		if((this.power - power) >= 0){
@@ -60,9 +70,7 @@ public class TileEntityPowerBase extends TileBase {
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
 		super.readFromNBT(nbtTagCompound);
-		if (nbtTagCompound.hasKey("Power")) {
-			power = (nbtTagCompound.getInteger("Power"));
-		}
+		power = nbtTagCompound.getShort("Power");
 		if (nbtTagCompound.hasKey("PowerState")) {
 			sucksPower = nbtTagCompound.getBoolean("PowerState");
 		}
@@ -71,7 +79,7 @@ public class TileEntityPowerBase extends TileBase {
 	public boolean receiveClientEvent(int eventID, int secondvalue) {
 		switch(eventID){
 			case(6):{
-				this.power = secondvalue;
+				this.power = (short)secondvalue;
 				break;
 			}
 			default:{
@@ -152,10 +160,28 @@ public class TileEntityPowerBase extends TileBase {
 	}
 
 	@Override
+	public String toString() {
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append(super.toString());
+
+		stringBuilder.append("TileEntityPowerBase Data - ");
+		stringBuilder.append("\n");
+		stringBuilder.append("Power: " + power);
+		stringBuilder.append("\n");
+		stringBuilder.append("Power State: " + sucksPower);
+		stringBuilder.append("\n");
+		stringBuilder.append("Can Recive Power: " + this.canRecivePower());
+		stringBuilder.append("\n");
+
+		return stringBuilder.toString();
+	}
+	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setInteger("Power", this.getPower());
+		nbtTagCompound.setShort("Power", power);
 		nbtTagCompound.setBoolean("PowerState", sucksPower);
 
 	}

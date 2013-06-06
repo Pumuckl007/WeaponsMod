@@ -17,14 +17,19 @@ import net.minecraftforge.common.Property;
 import weapons.armor.ItemInfoHelmet;
 import weapons.armor.ItemJetBoots;
 import weapons.armor.ItemJetPack;
+import weapons.blocks.BlockAntiMaterGenerator;
 import weapons.blocks.BlockDeath;
 import weapons.blocks.BlockPowerStorage;
 import weapons.blocks.BlockProjetor;
+import weapons.blocks.BlockRandom;
 import weapons.blocks.BlockSicurityStorage;
+import weapons.blocks.BlockUpgrator;
 import weapons.blocks.BlockWeaponCarver;
 import weapons.bullets.EntityBullet;
 import weapons.bullets.EntityRocket;
 import weapons.bullets.ItemBullet;
+import weapons.entity.EntityFlare;
+import weapons.entity.EntityRobot;
 import weapons.entity.EntitySpaceShip;
 import weapons.entity.EntitySpeeder;
 import weapons.events.EventShipControl;
@@ -34,9 +39,14 @@ import weapons.gunitems.Pistol;
 import weapons.gunitems.RocketLancher;
 import weapons.gunitems.ScarH;
 import weapons.network.PacketHandler;
+import weapons.power.Fuel;
+import weapons.speacalitems.ItemFlare;
 import weapons.speacalitems.ItemInfo;
+import weapons.speacalitems.ItemRobot;
 import weapons.speacalitems.ItemSpaceShip;
 import weapons.speacalitems.ItemSpeeder;
+import weapons.speacalitems.ItemTransBlockTeleporter;
+import weapons.upgrads.Upgrads;
 import weapons.utils.Color;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -85,13 +95,42 @@ public class Weapons
 	public static Block projetor;
 	public static Block sicurityStorage;
 	public static Block powerStorage;
+	public static Block upgator;
+	public static Block random;
+	public static Block antiMaterGenerator1;
+	public static Block antiMaterGenerator2;
+	public static Block antiMaterGenerator3;
+	public static Block antiMaterGenerator4;
+	public static Block antiMaterGenerator5;
+	public static Block antiMaterGenerator6;
+	public static Block antiMaterGenerator7;
+	public static Block antiMaterGenerator8;
+	public static Block antiMaterGenerator9;
+	public static Block antiMaterGenerator10;
+	public static Block antiMaterGenerator11;
+	public static Block antiMaterGenerator12;
+	public static Block antiMaterGenerator13;
+	public static Block antiMaterGenerator14;
+	public static Block antiMaterGenerator15;
+	public static Block antiMaterGenerator16;
+	public static Block antiMaterGenerator17;
+	public static Block antiMaterGenerator18;
+	public static Block antiMaterGenerator19;
+	public static Block antiMaterGenerator20;
+	public static Block antiMaterGenerator21;
+	public static Block antiMaterGenerator22;
+	public static Block antiMaterGenerator23;
+	public static Block antiMaterGenerator24;
+	public static Block antiMaterGenerator25;
+	public static Block antiMaterGenerator26;
+	public static Block antiMaterGenerator27;
 
 	public static Item pisol1;
 	public static Item mGun1;
 	public static Item rocketLancher1;
 	public static Item flameThrower;
 	public static Item iceBallLauncher;
-	
+	public static Item flare;
 	public static Item info;
 	
 	public static Item spaceship;
@@ -103,14 +142,16 @@ public class Weapons
 	public static Item jetPack;
 	public static Item jetBoots;
 	public static Item infoHelmet;
+	
+	public static Item transBlockTelepoerter;
 
-
+	public static Item robot;
 	public static String errorString = "";
 	public static int errorStringTimer = 0;
 
 
 
-
+	public static int upgradIds;
 	static int startEntityId = 300;
 	public static int yourblockModelId;
 	public static int yourblockModelId2;
@@ -122,18 +163,20 @@ public class Weapons
 	public static int guiWeaponCraver = 0;
 	public static int guiSicurityStorage = 1;
 	public static int guiPowerStorage = 2;
-
+	public static int guiAntiMaterGenerator = 3;
+	public static int guiUpgator = 4;
 
 	@PreInit
 	public void initConfig(FMLPreInitializationEvent fpe)
 	{
-		
+		Fuel.init();
 		Configuration config = new Configuration(fpe.getSuggestedConfigurationFile());
 
 		config.load();
 
 		int firstBlockId = config.getBlock("StartBlockId", 3700).getInt();
 		startBlockID = firstBlockId;
+		upgradIds = config.getItem("Start Upgrad ID", 17000).getInt();
 
 		int randomItemID = config.getItem("StartItemId", 15000).getInt();
 		bulletid = randomItemID;
@@ -156,11 +199,41 @@ public class Weapons
 		// boolean someBoolean = someProperty.getBoolean(true);
 
 		config.save();
+		int speacalblockid = startBlockID + 50;
 		weaponCarver = (new BlockWeaponCarver(startBlockID));
 		death = (new BlockDeath(startBlockID + 1));
 		projetor = (new BlockProjetor(startBlockID + 2));
 		sicurityStorage = (new BlockSicurityStorage(startBlockID + 3));
 		powerStorage = (new BlockPowerStorage(startBlockID + 4));
+		upgator = (new BlockUpgrator(startBlockID + 5));
+		random = (new BlockRandom(startBlockID + 6));
+		antiMaterGenerator1 = (new BlockAntiMaterGenerator(speacalblockid, 1));
+		antiMaterGenerator2 = (new BlockAntiMaterGenerator(speacalblockid + 1, 2));
+		antiMaterGenerator3 = (new BlockAntiMaterGenerator(speacalblockid + 2, 3));
+		antiMaterGenerator4 = (new BlockAntiMaterGenerator(speacalblockid + 3, 4));
+		antiMaterGenerator5 = (new BlockAntiMaterGenerator(speacalblockid + 4, 5));
+		antiMaterGenerator6 = (new BlockAntiMaterGenerator(speacalblockid + 5, 6));
+		antiMaterGenerator7 = (new BlockAntiMaterGenerator(speacalblockid + 6, 7));
+		antiMaterGenerator8 = (new BlockAntiMaterGenerator(speacalblockid + 7, 8));
+		antiMaterGenerator9 = (new BlockAntiMaterGenerator(speacalblockid + 8, 9));
+		antiMaterGenerator10 = (new BlockAntiMaterGenerator(speacalblockid + 9, 10));
+		antiMaterGenerator11 = (new BlockAntiMaterGenerator(speacalblockid + 10, 11));
+		antiMaterGenerator12 = (new BlockAntiMaterGenerator(speacalblockid + 11, 12));
+		antiMaterGenerator13 = (new BlockAntiMaterGenerator(speacalblockid + 12, 13));
+		antiMaterGenerator14 = (new BlockAntiMaterGenerator(speacalblockid + 13, 14));
+		antiMaterGenerator15 = (new BlockAntiMaterGenerator(speacalblockid + 14, 15));
+		antiMaterGenerator16 = (new BlockAntiMaterGenerator(speacalblockid + 15, 16));
+		antiMaterGenerator17 = (new BlockAntiMaterGenerator(speacalblockid + 16, 17));
+		antiMaterGenerator18 = (new BlockAntiMaterGenerator(speacalblockid + 17, 18));
+		antiMaterGenerator19 = (new BlockAntiMaterGenerator(speacalblockid + 18, 19));
+		antiMaterGenerator20 = (new BlockAntiMaterGenerator(speacalblockid + 19, 20));
+		antiMaterGenerator21 = (new BlockAntiMaterGenerator(speacalblockid + 20, 21));
+		antiMaterGenerator22 = (new BlockAntiMaterGenerator(speacalblockid + 21, 22));
+		antiMaterGenerator23 = (new BlockAntiMaterGenerator(speacalblockid + 22, 23));
+		antiMaterGenerator24 = (new BlockAntiMaterGenerator(speacalblockid + 23, 24));
+		antiMaterGenerator25 = (new BlockAntiMaterGenerator(speacalblockid + 24, 25));
+		antiMaterGenerator26 = (new BlockAntiMaterGenerator(speacalblockid + 25, 26));
+		antiMaterGenerator27 = (new BlockAntiMaterGenerator(speacalblockid + 26, 27));
 		GameRegistry.registerBlock(weaponCarver, "WeaponCarver");
 		GameRegistry.registerBlock(death, "Death");
 		GameRegistry.registerBlock(projetor, "Projetor");
@@ -188,7 +261,7 @@ public class Weapons
 		int specialid = bulletid + 256;
 		
 		
-
+		Upgrads.load(fie);
 		pisol1 = (new Pistol(gunid).setUnlocalizedName("1"));
 		mGun1 = (new ScarH(gunid + 50).setUnlocalizedName("5"));
 		rocketLancher1 = (new RocketLancher(gunid + 100).setUnlocalizedName("2"));
@@ -205,7 +278,10 @@ public class Weapons
 		
 		spaceship = (new ItemSpaceShip(specialid + 1).setUnlocalizedName("12"));
 		speeder = (new ItemSpeeder(specialid + 2).setUnlocalizedName("13"));
-
+		
+		transBlockTelepoerter = (new ItemTransBlockTeleporter(specialid + 3));
+		flare = (new ItemFlare(specialid + 4));
+		robot = (new ItemRobot(specialid + 5));
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
 		iceBallLauncher.setCreativeTab(weaponsTab);
@@ -236,15 +312,19 @@ public class Weapons
 		//Minecraft Forge Preload Textures
 
 		EntityRegistry.registerModEntity(EntityBullet.class, "bullet", this.getUniqueEntityId(), this, 80, 3, true);
-		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.bullet.name", "bullet");
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.bullet.name", "bullet");
 		EntityRegistry.registerModEntity(EntityRocket.class, "rocket", this.getUniqueEntityId(), this, 80, 3, true);
-		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.rocket.name", "rocket");
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.rocket.name", "rocket");
 		EntityRegistry.registerModEntity(EntityRocket.class, "iceball", this.getUniqueEntityId(), this, 80, 3, true);
-		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.iceball.name", "iceball");
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.iceball.name", "iceball");
 		EntityRegistry.registerModEntity(EntitySpaceShip.class, "spaceship", this.getUniqueEntityId(), this, 80, 3, true);
-		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.spaceship.name", "spaceship");
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.spaceship.name", "spaceship");
 		EntityRegistry.registerModEntity(EntitySpeeder.class, "speeder", this.getUniqueEntityId(), this, 80, 3, true);
-		LanguageRegistry.instance().addStringLocalization("entity.MoreOres.speeder.name", "speeder");
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.speeder.name", "speeder");
+		EntityRegistry.registerModEntity(EntityFlare.class, "flare", this.getUniqueEntityId(), this, 80, 3, true);
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.flare.name", "flare");
+		EntityRegistry.registerModEntity(EntityRobot.class, "robot", this.getUniqueEntityId(), this, 80, 3, true);
+		LanguageRegistry.instance().addStringLocalization("entity.weapons.robot.name", "robot");
 
 		proxy.load();
 		proxy.loadSound();
@@ -318,6 +398,7 @@ public class Weapons
 		LanguageRegistry.addName(weaponCarver,"Weapon Carver");
 		LanguageRegistry.addName(death,Color.DARK_RED + "Death");
 		LanguageRegistry.addName(projetor,"Block Projetor");
+		LanguageRegistry.addName(sicurityStorage,"Sicurity Storage");
 		LanguageRegistry.addName(powerStorage,"PowerStorage");
 	}
 
@@ -345,7 +426,11 @@ public class Weapons
 	public void recipes()
 	{
 
-
+		GameRegistry.addRecipe(new ItemStack(Weapons.transBlockTelepoerter, 1), 
+				"xx ", 
+				"xx ", 
+				"xx ", 
+				'x', Block.stone);
 		GameRegistry.addRecipe(new ItemStack(Weapons.bullet1, 32), 
 				" x ", 
 				"xwx", 
