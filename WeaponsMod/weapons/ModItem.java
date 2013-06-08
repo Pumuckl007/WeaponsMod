@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,9 +16,10 @@ public class ModItem extends Item {
 	private EnumAction animation = EnumAction.none;
 	public ModItem(int itemId){
 		super(itemId);
+		this.setCreativeTab(Weapons.weaponsTab);
 	}
 	public ModItem(int itemId, boolean allwaysUp, EnumAction animation){
-		super(itemId);
+		this(itemId);
 		this.allwaysUp = allwaysUp;
 		this.animation = animation;
 	}
@@ -30,19 +32,29 @@ public class ModItem extends Item {
 	
 	
 	@Override
+	public void onCreated(ItemStack item, World par2World,
+			EntityPlayer par3EntityPlayer)
+	{
+		if(!item.hasTagCompound()){
+			item.setTagCompound(new NBTTagCompound("WeaponItem"));
+		}
+	}
+	@Override
 	public void onUpdate(ItemStack item, World par2World,
 			Entity entity, int par4, boolean par5)
 	{
-		
+		if(!item.hasTagCompound() && entity instanceof EntityPlayer){
+			this.onCreated(item, par2World, (EntityPlayer)entity);
+		}
 		if(entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer) entity;
 			if(this.allwaysUp){
-//				player.setItemInUse(item, 1);
+				player.setItemInUse(item, 1);
 				player.limbSwing = 90;
 			}
-//			if(player.isEating() && !this.allwaysUp){
-//				player.setEating(false);
-//			}
+			else{
+				player.stopUsingItem();
+			}
 		}
 	}
 	@SideOnly(Side.CLIENT)

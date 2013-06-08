@@ -35,6 +35,7 @@ import weapons.entity.EntitySpeeder;
 import weapons.events.EventShipControl;
 import weapons.gunitems.FT;
 import weapons.gunitems.IceBallLauncher;
+import weapons.gunitems.ItemPhaser;
 import weapons.gunitems.Pistol;
 import weapons.gunitems.RocketLancher;
 import weapons.gunitems.ScarH;
@@ -42,7 +43,9 @@ import weapons.network.PacketHandler;
 import weapons.power.Fuel;
 import weapons.speacalitems.ItemFlare;
 import weapons.speacalitems.ItemInfo;
+import weapons.speacalitems.ItemMobJar;
 import weapons.speacalitems.ItemRobot;
+import weapons.speacalitems.ItemRobotDestoryer;
 import weapons.speacalitems.ItemSpaceShip;
 import weapons.speacalitems.ItemSpeeder;
 import weapons.speacalitems.ItemTransBlockTeleporter;
@@ -146,6 +149,10 @@ public class Weapons
 	public static Item transBlockTelepoerter;
 
 	public static Item robot;
+	public static Item robotDestroyer;
+	public static Item phaser;
+	public static Item mobJar;
+	
 	public static String errorString = "";
 	public static int errorStringTimer = 0;
 
@@ -250,7 +257,6 @@ public class Weapons
 
 	public void load(FMLInitializationEvent fie)
 	{
-
         NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
         MinecraftForge.EVENT_BUS.register(new EventShipControl("" , 0));
 		this.addAchievementLocalizations();
@@ -282,6 +288,10 @@ public class Weapons
 		transBlockTelepoerter = (new ItemTransBlockTeleporter(specialid + 3));
 		flare = (new ItemFlare(specialid + 4));
 		robot = (new ItemRobot(specialid + 5));
+		robotDestroyer = (new ItemRobotDestoryer(specialid + 6));
+		phaser = (new ItemPhaser(specialid + 7));
+		mobJar = (new ItemMobJar(specialid + 8));
+		
 		pisol1.setCreativeTab(weaponsTab);
 		mGun1.setCreativeTab(weaponsTab);
 		iceBallLauncher.setCreativeTab(weaponsTab);

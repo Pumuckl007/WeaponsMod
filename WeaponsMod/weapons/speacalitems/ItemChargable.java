@@ -2,6 +2,7 @@ package weapons.speacalitems;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -33,8 +34,20 @@ public class ItemChargable extends weapons.ModItem{
 	
 
 	@Override
+	public void onUpdate(ItemStack item, World par2World, Entity entity,
+			int par4, boolean par5)
+	{
+		super.onUpdate(item, par2World, entity, par4, par5);
+		if(!item.hasTagCompound()){
+			if(entity instanceof EntityPlayer){
+				this.onCreated(item, par2World, (EntityPlayer)entity);
+			}
+		}
+	}
+	@Override
 	public void onCreated(ItemStack item, World par2World, EntityPlayer par3EntityPlayer)
 	{
+		super.onCreated(item, par2World, par3EntityPlayer);
 		if(item.hasTagCompound()){
 			NBTTagCompound tag = item.stackTagCompound;
 			tag.setInteger("Power", 0);

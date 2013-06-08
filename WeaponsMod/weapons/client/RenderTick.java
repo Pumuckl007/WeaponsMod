@@ -17,6 +17,9 @@ import cpw.mods.fml.common.TickType;
 public class RenderTick implements ITickHandler{
 
 	public static float playerRecoil = 0;
+	public static double rasYaw = 0;
+	public static double rasPitch = 0;
+	public static double raHight = 0;
 	private float antiRecoil = 0;
 	protected static InfoHelmet info;
 	public static Double[] hight;
@@ -42,8 +45,14 @@ public class RenderTick implements ITickHandler{
 		}
 		updategunrecoil();
 		updateSS();
+		updateRobot();
 	}
 
+	private void updateRobot(){
+		rasYaw += 0.014;
+		rasPitch += 0.0178;
+		raHight += 0.006782;
+	}
 	private void updateSS(){
 		hight[0] += 0.0056543356;
 		hight[1] += 0.0074522415;

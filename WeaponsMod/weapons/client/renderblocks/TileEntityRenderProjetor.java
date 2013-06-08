@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 import weapons.client.models.blocks.ModelProjetor;
+import weapons.client.rendering.RenderUtils;
 import weapons.tileentity.TileEntityProjetor;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -53,15 +54,15 @@ public class TileEntityRenderProjetor extends TileEntitySpecialRenderer {
 		Integer posY = tile.yCoord;
 		Integer posZ = tile.zCoord;
 		GL11.glPushMatrix();
-		renderString(x,y,z, "posZ: " + posZ.toString(), off);
+		RenderUtils.renderString(x,y,z, "posZ: " + posZ.toString(), off);
 		GL11.glPopMatrix();
 		off = 0;
 		GL11.glPushMatrix();
-		renderString(x,y,z, "posY: " + posY.toString(), off);
+		RenderUtils.renderString(x,y,z, "posY: " + posY.toString(), off);
 		GL11.glPopMatrix();
 		off = -10;
 		GL11.glPushMatrix();
-		renderString(x,y,z, "posX: " + posX.toString(), off);
+		RenderUtils.renderString(x,y,z, "posX: " + posX.toString(), off);
 
 		GL11.glPopMatrix();
 	}
