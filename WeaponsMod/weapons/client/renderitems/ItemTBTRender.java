@@ -26,7 +26,7 @@ public class ItemTBTRender extends Render implements IItemRenderer {
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
-		return true;
+		return RenderUtils.shouldRender3d();
 	}
 
 	@Override

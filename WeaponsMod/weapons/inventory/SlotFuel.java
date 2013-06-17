@@ -18,7 +18,10 @@ public class SlotFuel extends Slot
      */
     public boolean isItemValid(ItemStack item)
     {
-    	return Fuel.isItemFuelSource(item.getItem());
+    	if(Fuel.isBlockFuelSource(item.itemID)){
+    		return true;
+    	}
+    	return false;
     }
 
     /**

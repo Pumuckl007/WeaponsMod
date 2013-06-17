@@ -9,7 +9,8 @@ public class WeaponsTab extends CreativeTabs{
 	    super(label);
 	}
 	public ItemStack getIconItemStack() {
-	    return new ItemStack(Weapons.pisol1);
+		ItemStack item = new ItemStack(Weapons.weaponCarver);
+	    return item;
 	}
 	
 }

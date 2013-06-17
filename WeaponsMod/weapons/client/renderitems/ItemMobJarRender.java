@@ -1,12 +1,9 @@
 package weapons.client.renderitems;
 
-import net.minecraft.client.model.ModelCreeper;
-import net.minecraft.client.model.ModelDragon;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -14,7 +11,6 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import weapons.client.rendering.RenderUtils;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -79,7 +75,6 @@ public class ItemMobJarRender extends Render implements IItemRenderer {
 		GL11.glRotatef(rotx, 1, 0, 0);
 		GL11.glRotatef(roty, 0, 1, 0);
 		GL11.glRotatef(rotz, 0, 0, 1);
-
 		if(item.hasTagCompound()){
 			Entity entity = EntityList.createEntityByName(item.stackTagCompound.getString("WeaponTagExtraEntityName"), null);
 			if(entity != null){

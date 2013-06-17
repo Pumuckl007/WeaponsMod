@@ -7,26 +7,25 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import weapons.client.models.bullet.ModelRocket;
+import weapons.client.models.ModelRobot;
 import weapons.client.rendering.RenderUtils;
-import cpw.mods.fml.client.FMLClientHandler;
+import weapons.utils.EnumRobot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
 @SideOnly(Side.CLIENT)
-public class ItemRocketRender extends Render implements IItemRenderer {
+public class ItemRobotRender extends Render implements IItemRenderer {
 
-	private ModelRocket testModel;
+	private ModelRobot model;
+	public ItemRobotRender() {
 
-	public ItemRocketRender() {
-
-		testModel = new ModelRocket();
+		model = new ModelRobot();
 	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-
+		
 		return RenderUtils.shouldRender3d();
 	}
 
@@ -47,19 +46,19 @@ public class ItemRocketRender extends Render implements IItemRenderer {
 
 		switch (type) {
 			case ENTITY: {
-				renderGun(1F, 0F, 0F, 0F, 0F, 0F, 0.50F);
+				render(0F, 0F, 0F, 0F, 0F, 0F, 0.50F, item);
 				return;
 			}
 			case EQUIPPED: {
-				renderGun(1F, 0.0F, 1.25F, 0F, 90F, 0F, 0.40F);
+				render(1.4F, -1F, 0.05F, -7F, -75F, -7F, 0.25F, item);
 				return;
 			}
 			case INVENTORY: {
-				renderGun(0.5F, 0F, 0.0F, 0, 10F, 0F, 0.50F);
+				render(-2.5F, -1F, 0.0F, 0, 10F, 0F, 0.35F, item);
 				return;
 			}
 			case EQUIPPED_FIRST_PERSON:{
-				renderGun(3F, 0.5F, 1.25F, 0F, 180F, -27.5F, 0.50F);
+				render(1F, 0F, 1.25F, 0F, 0, 13F, 0.50F, item);
 				return;
 			}
 			default:
@@ -68,10 +67,9 @@ public class ItemRocketRender extends Render implements IItemRenderer {
 
 	}
 
-	private void renderGun(float x, float y, float z, float rotx, float roty, float rotz, float scale) {
+	private void render(float x, float y, float z, float rotx, float roty, float rotz, float scale, ItemStack item) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 
 		// Scale, Translate, Rotate
 		GL11.glScalef(scale, scale, scale);
@@ -79,18 +77,14 @@ public class ItemRocketRender extends Render implements IItemRenderer {
 		GL11.glRotatef(rotx, 1, 0, 0);
 		GL11.glRotatef(roty, 0, 1, 0);
 		GL11.glRotatef(rotz, 0, 0, 1);
-
-
-
-
-		// Bind texture
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture("/mods/weapons/textures/models/rocetlanch.png");
-
-		// Render
-		testModel.render();
-
-
-		GL11.glEnable(GL11.GL_LIGHTING);
+		model.render(EnumRobot.R_BBase);
+		model.render(EnumRobot.R_BEye);
+		model.render(EnumRobot.R_BThrust);
+		model.render(EnumRobot.R_BTurnbottom);
+		model.render(EnumRobot.R_LArm);
+		model.render(EnumRobot.R_LZap);
+		model.render(EnumRobot.R_RArm);
+		model.render(EnumRobot.R_RZap);
 		GL11.glPopMatrix();
 	}
 
@@ -98,7 +92,7 @@ public class ItemRocketRender extends Render implements IItemRenderer {
 	public void doRender(Entity entity, double d0, double d1, double d2,
 			float f, float f1)
 	{
-		// TODO Auto-generated method stub
+		System.out.println("There was an eror: " + entity);
 
 	}
 }

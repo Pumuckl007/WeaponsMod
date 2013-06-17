@@ -17,21 +17,23 @@ public class Fuel {
 		useableItemFuel.put(Item.dyePowder, 5);
 		useableBlockFuel.put(Block.blockLapis, 45);
 	}
-	public static void addUseableFuel(Item item, int integer){
-		useableItemFuel.put(item, integer);
+	public static void addUseableFuel(Item item, int fuel){
+		useableItemFuel.put(item, fuel);
 	}
 	public static void fuelItem(Item item){
 		fuelItems.add(item);
 	}
-	public static boolean isItemFuelSource(Item item){
-		if(useableItemFuel.containsKey(item)){
-			return true;
+	public static boolean isBlockFuelSource(int itemID){
+		for(Item item : useableItemFuel.keySet()){
+			if(item.itemID == itemID){
+				return true;
+			}
 		}
-		else if(fuelItems.contains(item)){
-			return true;
+		for(Block block : useableBlockFuel.keySet()){
+			if(block.blockID == itemID){
+				return true;
+			}
 		}
-		else{
-			return false;
-		}
+		return false;
 	}
 }

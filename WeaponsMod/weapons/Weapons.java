@@ -69,7 +69,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @Mod(modid = "weapons",
 name = "Weapons Mod",
 version = "@VERSION@ (build @BUILD_NUMBER@)",
-dependencies = "required-after:Forge@[7.8.0.703,)",
+dependencies = "required-after:Forge@[7.8.1.737,)",
 certificateFingerprint = "@FINGERPRINT@")
 @NetworkMod(
         channels = { "weapons" },
@@ -268,22 +268,22 @@ public class Weapons
 		
 		
 		Upgrads.load(fie);
-		pisol1 = (new Pistol(gunid).setUnlocalizedName("1"));
-		mGun1 = (new ScarH(gunid + 50).setUnlocalizedName("5"));
-		rocketLancher1 = (new RocketLancher(gunid + 100).setUnlocalizedName("2"));
-		flameThrower = (new FT(gunid + 125).setUnlocalizedName("6"));
-		info = (new ItemInfo(specialid).setUnlocalizedName("7"));
-		iceBallLauncher = (new IceBallLauncher(gunid + 80).setUnlocalizedName("8"));
+		pisol1 = (new Pistol(gunid).setUnlocalizedName("pistol"));
+		mGun1 = (new ScarH(gunid + 50).setUnlocalizedName("scarh"));
+		rocketLancher1 = (new RocketLancher(gunid + 100).setUnlocalizedName("rocketlauncher"));
+		flameThrower = (new FT(gunid + 125).setUnlocalizedName("flamethrower"));
+		info = (new ItemInfo(specialid).setUnlocalizedName("info"));
+		iceBallLauncher = (new IceBallLauncher(gunid + 80).setUnlocalizedName("iceballlauncher"));
 
-		bullet1 = (new ItemBullet(bulletid).setUnlocalizedName("3"));
+		bullet1 = (new ItemBullet(bulletid).setUnlocalizedName("bullet"));
 
-		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("4"));
-		jetPack = (new ItemJetPack(specialid + 41, 0, 1).setUnlocalizedName("9"));
-		jetBoots = (new ItemJetBoots(specialid + 43, 0, 3).setUnlocalizedName("10"));
-		infoHelmet = (new ItemInfoHelmet(specialid + 40, 0, 0).setUnlocalizedName("11"));
+		rocket1 = (new ItemBullet(bulletid + 100).setUnlocalizedName("rocket"));
+		jetPack = (new ItemJetPack(specialid + 41, 0, 1).setUnlocalizedName("jetpack"));
+		jetBoots = (new ItemJetBoots(specialid + 43, 0, 3).setUnlocalizedName("jetboots"));
+		infoHelmet = (new ItemInfoHelmet(specialid + 40, 0, 0).setUnlocalizedName("infohelmet"));
 		
-		spaceship = (new ItemSpaceShip(specialid + 1).setUnlocalizedName("12"));
-		speeder = (new ItemSpeeder(specialid + 2).setUnlocalizedName("13"));
+		spaceship = (new ItemSpaceShip(specialid + 1).setUnlocalizedName("spaceship"));
+		speeder = (new ItemSpeeder(specialid + 2).setUnlocalizedName("speeder"));
 		
 		transBlockTelepoerter = (new ItemTransBlockTeleporter(specialid + 3));
 		flare = (new ItemFlare(specialid + 4));
@@ -316,10 +316,6 @@ public class Weapons
 		biomes();
 		otherNames();
 		addAchievementLocalizations();
-
-
-
-		//Minecraft Forge Preload Textures
 
 		EntityRegistry.registerModEntity(EntityBullet.class, "bullet", this.getUniqueEntityId(), this, 80, 3, true);
 		LanguageRegistry.instance().addStringLocalization("entity.weapons.bullet.name", "bullet");
@@ -437,10 +433,12 @@ public class Weapons
 	{
 
 		GameRegistry.addRecipe(new ItemStack(Weapons.transBlockTelepoerter, 1), 
-				"xx ", 
-				"xx ", 
-				"xx ", 
-				'x', Block.stone);
+				" z ", 
+				"xyx", 
+				"xxx", 
+				'x', Block.stone,
+				'y', Item.diamond,
+				'z', Block.glass);
 		GameRegistry.addRecipe(new ItemStack(Weapons.bullet1, 32), 
 				" x ", 
 				"xwx", 

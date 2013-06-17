@@ -273,6 +273,10 @@ public class TileEntityUpgator extends TileEntityPowerBase implements IInventory
 				}
 			}
 		}
+		float offX = 0;
+		float offY = 0.05F;
+		float offZ = 0;
+		this.worldObj.spawnParticle("tilecrack_" + this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord) + "_" + 10, this.xCoord + offX + 0.5,  this.yCoord + offY + 1,  this.zCoord + offZ  + 0.5, 0, 0.2, 0);
 	}
 	public ItemStack getStackInRowAndColumn(int par1, int par2)
 	{

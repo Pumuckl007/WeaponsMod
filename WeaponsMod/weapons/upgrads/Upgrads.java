@@ -9,7 +9,7 @@ public class Upgrads {
 	public static Item TransBlockTeleporterUpgradeTire2;
 	public static void load(FMLInitializationEvent fie)
 	{
-		TransBlockTeleporterUpgradeTire2 = (new ItemUpgrade(Weapons.upgradIds, Weapons.transBlockTelepoerter, "Teare", 2).setUnlocalizedName("TransBlockTeleporterUpgradeTire2"));
+		TransBlockTeleporterUpgradeTire2 = (new ItemUpgrade(Weapons.upgradIds, Weapons.transBlockTelepoerter, "Teare", 2).setUnlocalizedName("tbtupgradet2"));
 		Upgrads.initNams();
 	}
 	private static void initNams(){

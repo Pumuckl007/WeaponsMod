@@ -4,20 +4,29 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import weapons.Weapons;
+import weapons.client.rendering.RenderUtils;
 import weapons.tileentity.TileEntityUpgator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockUpgrator extends BlockContainer{
 	private Random rand = new Random();
+	@SideOnly(Side.CLIENT)
+	private Icon icon;
+	@SideOnly(Side.CLIENT)
+	private Icon iconacid;
 	public BlockUpgrator(int id)
 	{
 		super(id, Material.iron);
@@ -29,6 +38,18 @@ public class BlockUpgrator extends BlockContainer{
 	}
 	
 	@Override
+	public Icon getIcon(int par1, int par2)
+	{
+		if(par2 == 10){
+			return this.iconacid;
+		}
+		if(par1 == 0 || par1 == 1){
+			return this.icon;
+		}
+		return this.blockIcon;
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world)
 	{
 		return new TileEntityUpgator();
@@ -36,7 +57,7 @@ public class BlockUpgrator extends BlockContainer{
 	@Override
     public boolean renderAsNormalBlock() {
 
-        return false;
+        return RenderUtils.shouldRender3d();
     }
 
     @Override
@@ -46,9 +67,20 @@ public class BlockUpgrator extends BlockContainer{
     }
 
     @Override
+	public void registerIcons(IconRegister iconRegister)
+	{
+		this.blockIcon = iconRegister.registerIcon("weapons:Upgrator");
+		this.icon = iconRegister.registerIcon("weapons:Upgratortop");
+		this.iconacid = iconRegister.registerIcon("weapons:Upgratoracid");
+	}
+
+	@Override
     public int getRenderType() {
 
-        return -1;
+    	if(RenderUtils.shouldRender3d()){
+    		return -1;
+    	}
+        return super.getRenderType();
     }
 
     @Override
@@ -58,11 +90,12 @@ public class BlockUpgrator extends BlockContainer{
         super.breakBlock(world, x, y, z, id, meta);
     }
 
-    @Override
+	@Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
 
-        if (player.isSneaking())
+        if (player.isSneaking()){
             return false;
+        }
         else {
             if (!world.isRemote) {
             	TileEntityUpgator tile = (TileEntityUpgator) world.getBlockTileEntity(x, y, z);

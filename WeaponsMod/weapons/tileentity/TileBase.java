@@ -10,6 +10,9 @@ import weapons.network.PacketTypeHandler;
 
 public class TileBase extends TileEntity {
 
+	protected Integer x = this.xCoord;
+	protected Integer y = this.yCoord;
+	protected Integer z = this.zCoord;
     private ForgeDirection orientation;
     private short state;
     private String owner;
@@ -88,6 +91,9 @@ public class TileBase extends TileEntity {
 
         super.readFromNBT(nbtTagCompound);
 
+        this.x = nbtTagCompound.getInteger("x");
+        this.y = nbtTagCompound.getInteger("y");
+        this.z = nbtTagCompound.getInteger("z");
         if (nbtTagCompound.hasKey("teDirection")) {
             orientation = ForgeDirection.getOrientation(nbtTagCompound.getByte("teDirection"));
         }

@@ -67,27 +67,7 @@ public class BlockSicurityStorage extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
 
 		if (player.isSneaking()){
-			TileEntitySicurityStorage tile = (TileEntitySicurityStorage) world.getBlockTileEntity(x, y, z);
-			ItemStack stack = tile.getStackInSlot(32);
-			if(stack != null){
-				if(stack.itemID == Block.tnt.blockID){
-					int size = stack.stackSize;
-					world.createExplosion(player, x, y, z, 2*size, true);
-				}
-			}
-			else if (!tile.ison){
-				player.openGui(Weapons.instance, Weapons.guiSicurityStorage, world, x, y, z);
-			}
-			else{
-				if(player.getHealth() > 1){
-					player.attackEntityFrom(DamageSource.generic, 1);
-				}
-				else{
-					player.addPotionEffect(new PotionEffect(15, 400));
-					player.addPotionEffect(new PotionEffect(9, 400));
-				}
-			}
-			return true;
+			return false;
 		}
 		else {
 			if (!world.isRemote) {

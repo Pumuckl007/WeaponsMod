@@ -5,6 +5,7 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
-import weapons.client.models.armor.ModelJetPack;
+import weapons.client.models.armor.RenderJetPack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -188,8 +189,8 @@ ISpecialArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemstack, int armorSlot) {
-		ModelJetPack model;
-		model = ModelJetPack.getInstance();
+		RenderJetPack model;
+		model = RenderJetPack.getInstance();
 		model.bipedBody.showModel = armorSlot == 1;
 		model.bipedRightArm.showModel = armorSlot == 1;
 		model.bipedLeftArm.showModel = armorSlot == 1;
@@ -291,6 +292,14 @@ ISpecialArmor {
 	public void addInformation(ItemStack stack, EntityPlayer player, @SuppressWarnings("rawtypes") List currentTipList, boolean advancedToolTips) {
 
 	}
-
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IconRegister iconRegister)
+	{
+		String id = this.getUnlocalizedName();
+		id = id.replace("item.", "");
+		itemIcon = iconRegister.registerIcon("weapons:" + id);
+		System.out.println("Item icon registed to: " + id);
+	}
 
 }

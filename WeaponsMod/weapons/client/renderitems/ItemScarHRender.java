@@ -8,6 +8,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import weapons.client.models.gun.ModelScarH;
+import weapons.client.rendering.RenderUtils;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +27,7 @@ public class ItemScarHRender extends Render implements IItemRenderer {
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
-		return true;
+		return RenderUtils.shouldRender3d();
 	}
 
 	@Override

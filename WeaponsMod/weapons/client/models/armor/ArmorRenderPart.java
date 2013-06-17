@@ -10,9 +10,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ArmorRenderPart extends ModelRenderer {
     protected WavefrontObject model;
-    protected ModelJetPack modelBase;
+    protected RenderJetPack modelBase;
 
-    public ArmorRenderPart(ModelJetPack modelBase, WavefrontObject model) {
+    public ArmorRenderPart(RenderJetPack modelBase, WavefrontObject model) {
         super(modelBase);
         this.modelBase = modelBase;
         this.model = model;

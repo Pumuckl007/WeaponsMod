@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.obj.WavefrontObject;
 
@@ -16,28 +15,28 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelJetBoots extends ModelBiped {
-	protected static ModelJetBoots instance;
-	private ModelJetBoot aModel = new ModelJetBoot();
+public class RenderInfoHelmet extends ModelBiped {
+	protected static RenderInfoHelmet instance;
+	private ModelInfoHelmet aModel = new ModelInfoHelmet();
 
-	public static ModelJetBoots getInstance() {
+	public static RenderInfoHelmet getInstance() {
 		if (instance == null) {
-			instance = new ModelJetBoots();
+			instance = new RenderInfoHelmet();
 		}
 		return instance;
 	}
 
-	public WavefrontObject jetPack;
+	public WavefrontObject wavefrontObj;
 
-	public ModelJetBoots()
+	public RenderInfoHelmet()
 	{
 		this(0.0F);
 	}
 
-	public ModelJetBoots(float par2)
+	public RenderInfoHelmet(float par2)
 	{
-		this.jetPack = (WavefrontObject) AdvancedModelLoader.loadModel("/mods/weapons/models/jetpack.obj");
-		this.bipedBody = new JetBootsRenderPart(this, jetPack);
+		this.wavefrontObj = (WavefrontObject) AdvancedModelLoader.loadModel("/mods/weapons/models/jetpack.obj");
+		this.bipedBody = new ModelPartRender(this, wavefrontObj);
 		this.bipedBody.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
 	}
 
@@ -57,24 +56,15 @@ public class ModelJetBoots extends ModelBiped {
 		}
 		GL11.glPushMatrix();
 		if(par1Entity instanceof EntityPlayer){
-			FMLClientHandler.instance().getClient().renderEngine.bindTexture("/mods/weapons/textures/models/jetboots.png");
+			EntityPlayer player = (EntityPlayer) par1Entity;
+			FMLClientHandler.instance().getClient().renderEngine.bindTexture("/mods/weapons/textures/models/infohelmet.png");
 			GL11.glScalef(0.6F, 0.6F, 0.6F);
-			GL11.glTranslatef(0, 2.5F, 0);
-			GL11.glRotatef(-90, 0, 1, 0);
-			GL11.glRotatef(180, 1, 0, 0);
-			par3 = par3 * 52.325581395F;
-			double hight = 1;
-			GL11.glTranslated(0, hight, 0);
-			GL11.glPushMatrix();
-	        GL11.glRotatef(MathHelper.cos(par2 * 0.6662F) * 1.4F * par3, 0,0,1);
-	        GL11.glTranslated(0, -hight, 0);
-	        aModel.renderright();
-	        GL11.glPopMatrix();
-	        GL11.glPushMatrix();
-	        GL11.glRotatef(MathHelper.cos(par2 * 0.6662F + (float)Math.PI) * 1.4F * par3, 0,0,1);
-	        GL11.glTranslated(0, -hight, 0);
-	        aModel.renderleft();
-	        GL11.glPopMatrix();
+//			GL11.glRotatef(player.rotationPitch, 1, 0, 0);
+			GL11.glRotatef((par5) -90, 0, 1, 0);
+			GL11.glRotatef(-player.rotationPitch, 0, 0, 1);
+			GL11.glRotatef(180, 0, 0, 1);
+			GL11.glTranslatef(0, 0.5F, 0);
+	        aModel.render();
 		}
 		GL11.glPopMatrix();
 	}

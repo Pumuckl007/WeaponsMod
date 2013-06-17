@@ -7,7 +7,8 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import weapons.client.models.armor.ModeljetPack;
+import weapons.client.models.armor.ModelJetPack;
+import weapons.client.rendering.RenderUtils;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,17 +17,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ItemJetPackRender extends Render implements IItemRenderer {
 
-	private ModeljetPack modelJetPack;
+	private ModelJetPack modelJetPack;
 
 	public ItemJetPackRender() {
 
-		modelJetPack = new ModeljetPack();
+		modelJetPack = new ModelJetPack();
 	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
-		return true;
+		return RenderUtils.shouldRender3d();
 	}
 
 	@Override

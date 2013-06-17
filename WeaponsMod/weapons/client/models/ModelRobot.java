@@ -122,6 +122,7 @@ public class ModelRobot extends ModelBase {
     			break;
     		}
     		default:{
+    			RenderUtils.renderSphere(0, 0, 0, 255, 255, 0, 255, 1);
     			break;
     		}
     	}

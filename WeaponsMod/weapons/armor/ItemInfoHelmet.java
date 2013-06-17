@@ -3,6 +3,7 @@ package weapons.armor;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
-import weapons.client.models.armor.ModelInfoHelmet;
+import weapons.client.models.armor.RenderInfoHelmet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,11 +33,10 @@ ISpecialArmor {
 		setMaxStackSize(1);
 		tid = id;
 	}
-
 	@Override
 	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, int layer) {
 
-		return "/mods/weapons/textures/models/infohelmet.png";
+		return "/mods/weapons/textures/items/infohelmet.png";
 
 	}
 
@@ -53,8 +53,8 @@ ISpecialArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemstack, int armorSlot) {
-		ModelInfoHelmet model;
-		model = ModelInfoHelmet.getInstance();
+		RenderInfoHelmet model;
+		model = RenderInfoHelmet.getInstance();
 		model.bipedHead.showModel = armorSlot == 0;
 		if(entityLiving instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer) entityLiving;
@@ -163,6 +163,14 @@ ISpecialArmor {
 	public void addInformation(ItemStack stack, EntityPlayer player, @SuppressWarnings("rawtypes") List currentTipList, boolean advancedToolTips) {
 
 	}
-
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IconRegister iconRegister)
+	{
+		String id = this.getUnlocalizedName();
+		id = id.replace("item.", "");
+		this.itemIcon = iconRegister.registerIcon("weapons:" + id);
+		System.out.println("Item icon registed to: " + id);
+	}
 
 }

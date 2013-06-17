@@ -3,6 +3,7 @@ package weapons.armor;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -206,6 +207,14 @@ ISpecialArmor {
 	public void addInformation(ItemStack stack, EntityPlayer player, @SuppressWarnings("rawtypes") List currentTipList, boolean advancedToolTips) {
 
 	}
-
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IconRegister iconRegister)
+	{
+		String id = this.getUnlocalizedName();
+		id = id.replace("item.", "");
+		itemIcon = iconRegister.registerIcon("weapons:" + id);
+		System.out.println("Item icon registed to: " + id);
+	}
 
 }

@@ -12,6 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import weapons.ModBlock;
+import weapons.Weapons;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -26,7 +27,7 @@ public class BlockRandom extends ModBlock{
 	{
 		super(id, Material.iron);
 		this.setUnlocalizedName("Random");
-//		this.setCreativeTab(Weapons.weaponsTab);
+		this.setCreativeTab(Weapons.weaponsTab);
 		this.setHardness(1F);
 		GameRegistry.registerBlock(this, "Random");
 		LanguageRegistry.addName(this,"Random");
@@ -39,14 +40,13 @@ public class BlockRandom extends ModBlock{
 	}
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int par1, int par2)
-    {
-        Icon icon = side;
-        if(par1 == 0 || par1 == 1){
-        	icon = top;
-        }
+	{
+		if(par1 == 0 || par1 == 1){
+			return top;
+		}
 
-        return icon;
-    }
+		return side;
+	}
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int id, int meta) {
 		world.spawnParticle("largeexplode", x,  y,  z, -4, 0, 0);
@@ -124,19 +124,19 @@ public class BlockRandom extends ModBlock{
 			return true;
 		}
 	}
-	 @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 
-	    /**
-	     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-	     * is the only chance you get to register icons.
-	     */
-		public void registerIcons(IconRegister par1IconRegister) {
-			// TODO Auto-generated method stub
-			String id = this.getUnlocalizedName();
-			top = par1IconRegister.registerIcon("weapons:" + id + "top");
-			side = par1IconRegister.registerIcon("weapons:" + id);
-			System.out.println("block icon registered to: " + id);
-			this.blockIcon = side;
-		}
+	/**
+	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+	 * is the only chance you get to register icons.
+	 */
+	public void registerIcons(IconRegister iconRegister) {
+		String id = this.getUnlocalizedName();
+		id = id.replace("tile.", "");
+		this.blockIcon = iconRegister.registerIcon("weapons:" + id);
+		top = iconRegister.registerIcon("weapons:" + id + "top");
+		side = iconRegister.registerIcon("weapons:" + id);
+		System.out.println("block icon registered to: " + id);
+	}
 
 }

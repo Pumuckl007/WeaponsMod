@@ -7,7 +7,8 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import weapons.client.models.armor.ModelinfoHelmet;
+import weapons.client.models.armor.ModelInfoHelmet;
+import weapons.client.rendering.RenderUtils;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,17 +17,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ItemInfoHelmetRender extends Render implements IItemRenderer {
 
-	private ModelinfoHelmet modle;
+	private ModelInfoHelmet modle;
 
 	public ItemInfoHelmetRender() {
 
-		modle = new ModelinfoHelmet();
+		modle = new ModelInfoHelmet();
 	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
-		return true;
+		return RenderUtils.shouldRender3d();
 	}
 
 	@Override

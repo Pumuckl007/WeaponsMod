@@ -1,6 +1,7 @@
 package weapons.client.rendering;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -205,6 +206,10 @@ public class RenderUtils {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glPopMatrix();
 	}
+    @SuppressWarnings("static-access")
+	public static boolean shouldRender3d(){
+    	return Minecraft.getMinecraft().isFancyGraphicsEnabled();
+    }
     public static FontRenderer getFontRendererFromRenderManager()
 	{
 		return FMLClientHandler.instance().getClient().fontRenderer;

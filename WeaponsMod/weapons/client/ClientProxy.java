@@ -36,6 +36,7 @@ import weapons.client.renderitems.ItemJetBootsRender;
 import weapons.client.renderitems.ItemJetPackRender;
 import weapons.client.renderitems.ItemMobJarRender;
 import weapons.client.renderitems.ItemPistolRender;
+import weapons.client.renderitems.ItemRobotRender;
 import weapons.client.renderitems.ItemRocketRender;
 import weapons.client.renderitems.ItemRocktlauncherRender;
 import weapons.client.renderitems.ItemScarHRender;
@@ -84,6 +85,7 @@ public class ClientProxy extends weapons.CommonProxy
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 513, new ItemSpaceShipRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 514, new ItemSpeederRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 515, new ItemTBTRender());
+		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 517, new ItemRobotRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 520, new ItemMobJarRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 552, new ItemInfoHelmetRender());
 		MinecraftForgeClient.registerItemRenderer(Weapons.bulletid + 553, new ItemJetPackRender());
