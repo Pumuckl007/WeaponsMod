@@ -172,6 +172,8 @@ public class Weapons
 	public static int guiPowerStorage = 2;
 	public static int guiAntiMaterGenerator = 3;
 	public static int guiUpgator = 4;
+	
+	public static boolean shouldUseFancyGraphix = true;
 
 	@PreInit
 	public void initConfig(FMLPreInitializationEvent fpe)
